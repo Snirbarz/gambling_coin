@@ -1,0 +1,14 @@
+trial,time,id,Date,response,side_1_stim,side_2_stim,latency,Block,Mu,SD,head,outcome,task,gamble_trial,reward,est_mu,est_low,est_high,conf_mu,conf_range
+2,085457,,2022-04-12,6666,5,6,337.7,training,-8,1,0,1,comb,no,0.0,NA,NA,NA,NA,NA
+2,085503,,2022-04-12,6666,5,6,793.6,training,-8,1,0,0,comb,no,-6.43,NA,NA,NA,NA,NA
+2,085510,,2022-04-12,6666,5,6,1180.6000000000001,training,-8,1,0,0,comb,no,-7.01,NA,NA,NA,NA,NA
+2,085516,,2022-04-12,6666,5,6,2628.5,training,-8,1,0,0,comb,no,-8.52,NA,NA,NA,NA,NA
+2,085525,,2022-04-12,6666,5,6,1369.3999999999999,training,-8,1,0,0,comb,no,-7.81,NA,NA,NA,NA,NA
+2,085532,,2022-04-12,6666,5,6,3171.0,training,-8,1,0,1,comb,no,0.0,NA,NA,NA,NA,NA
+2,085541,,2022-04-12,6666,5,6,776.5,training,-8,1,0,0,comb,no,-9.77,NA,NA,NA,NA,NA
+2,085548,,2022-04-12,6666,5,6,1711.4,training,-8,1,0,1,comb,no,0.0,NA,NA,NA,NA,NA
+2,085555,,2022-04-12,6666,5,6,2155.9,training,-8,1,0,1,comb,no,0.0,NA,NA,NA,NA,NA
+2,085603,,2022-04-12,6666,5,6,775.4,training,-8,1,0,0,comb,no,-8.81,NA,NA,NA,NA,NA
+2,085610,,2022-04-12,6666,5,6,456.0,training,-8,1,0,1,comb,no,0.0,NA,NA,NA,NA,NA
+2,085616,,2022-04-12,6666,5,6,1146.7,training,-8,1,0,1,comb,no,0.0,NA,NA,NA,NA,NA
+2,085643,,2022-04-12,1,5,6,6879.7,training,-8,1,0,1,comb,yes,0.0,-3.9,-7.5,-3.0,15.7,15.7
