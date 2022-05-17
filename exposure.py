@@ -19,7 +19,6 @@ Stimuli: all presented at 80cm away from the screen
 
     Mask:     300ms (core.wait(300ms), win.flip())
               grey circle
-              Bubble Mask
 
     Response: keyboard --> 'd' is for match (also left button)
                            'k' is for non match (also right button)
@@ -38,20 +37,20 @@ Stimuli: all presented at 80cm away from the screen
             feedback start
 
     Monitor specification
-            Screen Width = 29.376cm / needs to change
-            Screen Height = 16.524cm / needs to change
-            # Pixels wide = 1920 X 1080 / needs to change
-            pixel_density_x (num_pixels per cm) = 1920/52.7 / needs to change
-    ParallelPort = need to find address on computer
+            Screen Width = 37.632cm
+            Screen Height = 30.106cm
+            # Pixels wide = 1280 X 1024
+            pixel_density_x (num_pixels per cm) = 1024/37.632 / 34.013
+    ParallelPort = 0x3EFC
 
-            2-match fixation 00000001
-            3-nonmatch fixation 00000010
-            4-word 00000100
+            2- match fixation 00000001
+            3- nonmatch fixation 00000010
+            4- word 00000100
             5- mask 00001000
-            6-image 00010000
+            6- image 00010000
             7- responsematch 00100000
             8- responsenonmatch 01000000
-
+            10- feedback 10000001
             9- starttask 10000000
 '''
 # import some help
@@ -64,8 +63,8 @@ import numpy as np
 import pandas as pd
 
 # set parallel port address
-#port = parallel.ParallelPort(address = 0x0378)
-#port.setData(0)
+parallel.setPortAddress(0x3EFC)
+parallel.setData(0)
 date_val = datetime.now().strftime("%Y-%m-%d")
 
 # we want to setup our experiment: sub_id, sub_gender, sub_age
@@ -296,8 +295,13 @@ def failed_task():
                                  units = "pix", height = 32,
                                  alignHoriz = "right")
     text_info.draw()
+# task start (set data 9)
+
 # Our main program loop
 break_flag=0
+parallel.setData(9)
+core.wait(0.1)
+#parallel.setData(0)
 for b in range(1):
 
     # update the subject on what to do:
@@ -331,38 +335,51 @@ for b in range(1):
         print("Current Text is: %d" %(text_array[i]))
         fixation_cross()
         # flip window onto the screen
+
         win0.flip()
+        if match_array[i]==1:
+            parallel.setData(2)
+        else:
+            parallel.setData(3)
         time_fixation = np.random.randint(500,1000)/1000
         # enter trigger here (fixation)
         # wait 1 sec
-        core.wait(time_fixation)
+        core.wait(0.02)
+        parallel.setData(0)
+        core.wait(time_fixation-0.02)
         win0.flip()
         final_fix_time_array.append(time_fixation)
         # draw the text onto the window
         text_stim(text_array[i])
         # flip window onto screen
         win0.flip()
-        # enter trigger here (text_stim)
+        parallel.setData(4)
         time_text = np.random.randint(250,400)/1000
-        core.wait(time_text)
+        core.wait(0.02)
+        parallel.setData(0)
+        core.wait(time_text-0.02)
         final_text_time_array.append(time_text)
         # draw the mask onto the window
         masker_stim()
         # flip window onto screen
         win0.flip()
-        # enter trigger here (text_stim)
-        core.wait(.3)
+        parallel.setData(5)
+        core.wait(0.02)
+        parallel.setData(0)
+        core.wait(.28)
 
         # draw the image onto the window
         image_stim(stim_image[i])
         # flip window onto screen
         win0.flip()
-        # enter trigger here (stim_image_match,stim_image_nonmatch)
+        parallel.setData(6)
         start_time = clock.getTime()
-
+        core.wait(.02)
+        parallel.setData(0)
         # clear the Screen
         key = event.waitKeys(clearEvents = True,keyList = ['q','d','k'],
-                             maxWait = 1)
+                             maxWait = .98)
+
         if key is None:
             feedback_stim(1,0)
             print('did not press at all')
@@ -373,12 +390,14 @@ for b in range(1):
             core.wait(.2)
         else:
             if 'd' in key: # d is for match
+                parallel.setData(7)
                 print('pressed match')
                 sub_response_array.append(1)
                 stop_time = clock.getTime()
                 response_latency.append(round(stop_time-start_time,4)*1000)
                 print(response_latency[i])
             if 'k' in key: # j is for non match
+                parallel.setData(8)
                 print('pressed non match')
                 sub_response_array.append(0)
                 stop_time = clock.getTime()
@@ -392,13 +411,12 @@ for b in range(1):
                 break_flag = 1
                 break
             feedback_stim(sub_response_array[i],match_array[i])
+
             win0.flip()
-            # enter trigger here (response_match,response_nonmatch)
             core.wait(.2)
             if match_array[i] == 1 and sub_response_array[i] == 1:
                 no_trials[stim_image[i]] = no_trials[stim_image[i]] +1
                 print(no_trials)
-
         reached_criterion = len(list(filter(lambda x: x < correct_threshold, no_trials))) > 0
         print(no_trials)
 
