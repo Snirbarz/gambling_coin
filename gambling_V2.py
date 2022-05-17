@@ -77,8 +77,8 @@ from psychopy.constants import (NOT_STARTED, STARTED, PLAYING, PAUSED,
 import pathlib
 
 # set parallel port address
-#port = parallel.ParallelPort(address = 0x0378)
-#port.setData(0)
+parallel.setPortAddress(0x3EFC)
+parallel.setData(3)
 date_val = datetime.now().strftime("%Y-%m-%d") # obtain the current date
 
 # we want to setup our experiment: sub_id, sub_gender, sub_age
