@@ -52,17 +52,25 @@ Stimuli: all presented at 80cm away from the screen
             Screen Width = 37.632cm
             Screen Height = 30.106cm
             # Pixels wide = 1280 X 1024
-            pixel_density_x (num_pixels per cm) = 1024/37.632 / 34.013
-    ParallelPort = need to find address on computer and set values
+            pixel_density_x (num_pixels per cm) = 1280/37.632 =34.02
+    ParallelPort = 0x3EFC
 
             2- match fixation 00000001
-            3- nonmatch fixation 00000010
-            4- word 00000100
-            5- mask 00001000
-            6- image 00010000
-            7- responsematch 00100000
-            8- responsenonmatch 01000000
+            3- view trial 00000010
+            4- img trial 00000100
+            5- video 00001000
+            6- outcome learning 00010000
+            7- responsegamble 00100000
+            8- responsenotgamble 01000000
             9- starttask 10000000
+            10- instructions learning
+            11- instructions gambling use imagery
+            12- instructions gambling do not use imagery
+            13- training trials all trials are relevant
+            14- instructions gambling general
+            15- rate mu
+            16- rate range
+            17- rate confidence
 '''
 # import some help
 import os
@@ -372,6 +380,9 @@ def wait_scr():
                           )
     text.draw()
 
+parallel.setData(9) #task start
+core.wait(0.1)
+parallel.setData(0)
 # Our main program loop
 break_flag=0
 text_info = visual.TextStim(win0,text="Press ENTER to start",
@@ -380,6 +391,7 @@ text_info = visual.TextStim(win0,text="Press ENTER to start",
                              alignText = "center")
 text_info.draw()
 win0.flip()
+
 key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
 if 'return' in key:
     pass
@@ -392,11 +404,13 @@ text_info_start = visual.TextStim(win0,text="In the following task, you will be 
 
 text_info_start.draw()
 win0.flip()
+parallel.setData(10) # instructions learning
 key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
 if 'return' in key:
     pass
 win0.flip()
-for i in range(4,5):
+parallel.setData(0)
+for i in range(28):
         # if trial i is between 0 and 3 (included) then it is training blocks
         # if trials i >=4 then it is test blcok
         if i<4:
@@ -462,10 +476,12 @@ for i in range(4,5):
 
             text_info_start.draw()
             win0.flip()
+            parallel.setData(10) # instructions learning
             key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
             if 'return' in key:
                 pass
             win0.flip()
+            parallel.setData(0)
         if i ==1: # imagination trial
             loss_array = np.array([loss_Mu + loss_SD_img+1,loss_Mu+loss_SD_img+1,
                 loss_Mu + loss_SD_img-1,loss_Mu+loss_SD_img-1,
@@ -488,10 +504,12 @@ for i in range(4,5):
 
             text_info_start.draw()
             win0.flip()
+            parallel.setData(10) # instructions learning
             key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
             if 'return' in key:
                 pass
             win0.flip()
+            parallel.setData(0)
         if i ==2: # first training trial with combined instructions
             text_info_start = visual.TextStim(win0,text="Now, the task will include both observation trials and imagination trials. \n\n before each trial \n\n you will be told if it is an imagination trial or view trial \n\n press ENTER to continue" ,
                                          pos=(0,0),color = (-1,-1,-1),
@@ -500,10 +518,12 @@ for i in range(4,5):
 
             text_info_start.draw()
             win0.flip()
+            parallel.setData(10) # instructions learning
             key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
             if 'return' in key:
                 pass
             win0.flip()
+            parallel.setData(0)
         # create imagination and view trial such that no more than 2 trials in a row are img or view
         conditionsList = ["img","view"]
         test_task_comb = []
@@ -539,7 +559,7 @@ for i in range(4,5):
             outcome[ind_img] = outcome_img
             loss_array[ind_view] = loss_array_view
             loss_array[ind_img] = loss_array_img
-        for j in range(1):
+        for j in range(12):
             block_array.append(phase)
             trial_no.append(i)
             sub_id_array.append(sub_id)
@@ -561,9 +581,12 @@ for i in range(4,5):
             fixation_cross()
             # flip window onto the screen
             win0.flip()
+            parallel.setData(2) # fixation
+            core.wait(0.2)
+            parallel.setData(0)
             time_fixation = np.random.randint(500,1000)/1000
             # wait 1 sec
-            core.wait(time_fixation)
+            core.wait(time_fixation-0.2)
             win0.flip()
             final_fix_time_array.append(time_fixation)
 
@@ -578,6 +601,7 @@ for i in range(4,5):
                 image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
             # flip window onto screen
                 win0.flip()
+                parallel.setData(3) # view trial
                 start_time = clock.getTime()
                 key = event.waitKeys(maxWait = 9999,keyList = ["space"],clearEvents = True)
                 if 'space' in key:
@@ -586,14 +610,17 @@ for i in range(4,5):
                     response_latency.append(round(stop_time-start_time,4)*1000)
                     pass
                 win0.flip()
+                parallel.setData(0)
                 time_stim = np.random.randint(250,400)/1000
                 core.wait(time_stim)
                 coin_flip = flip_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]],outcome[j])
                 coin_flip.draw()
                 win0.flip()
+                parallel.setData(5) # view trial
                 while  not coin_flip.isFinished:
                     coin_flip.draw()
                     win0.flip()
+                parallel.setData(0)
                 final_task_comb_array.append("view")
             if "img" in task:
                 text_view = visual.TextStim(win0,text="Please imagine AS IF the coin outcome is marked in green\n press SPACE to continue" ,
@@ -619,6 +646,7 @@ for i in range(4,5):
                 image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
             # flip window onto screen
                 win0.flip()
+                parallel.setData(4) # view trial
                 start_time = clock.getTime()
                 key = event.waitKeys(maxWait = 9999,keyList = ["space"],clearEvents = True)
                 if 'space' in key:
@@ -627,6 +655,7 @@ for i in range(4,5):
                     response_latency.append(round(stop_time-start_time,4)*1000)
                     pass
                 win0.flip()
+                parallel.setData(0)
                 coin_flip = visual.VlcMovieStim(win = win0,
                                                    filename = "data/coin000000.avi",
                                                    units = "pix",
@@ -634,10 +663,12 @@ for i in range(4,5):
                                                    autoStart=True)
                 coin_flip.draw()
                 win0.flip()
+                parallel.setData(5) #show video
                 while  not coin_flip.isFinished:
                     coin_flip.draw()
                     win0.flip()
                 final_task_comb_array.append("img")
+                parallel.setData(0)
             if "comb" in task:
                 if test_task_comb[j] =="img":
                     text_view = visual.TextStim(win0,text="Please imagine AS IF the coin outcome is marked in green\n press SPACE to continue" ,
@@ -669,6 +700,10 @@ for i in range(4,5):
                 image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
             # flip window onto screen
                 win0.flip()
+                if test_task_comb[j] =="img":
+                    parallel.setData(3)
+                else:
+                    parallel.setData(4)
                 start_time = clock.getTime()
                 key = event.waitKeys(maxWait = 9999,keyList = ["space"],clearEvents = True)
                 if 'space' in key:
@@ -676,6 +711,7 @@ for i in range(4,5):
                     stop_time = clock.getTime()
                     response_latency.append(round(stop_time-start_time,4)*1000)
                     pass
+                parallel.setData(0)
                 core.wait(.2)
                 if test_task_comb[j] == "view":
                     coin_flip = flip_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]],outcome[j])
@@ -687,13 +723,14 @@ for i in range(4,5):
                                                        autoStart=True)
                 coin_flip.draw()
                 win0.flip()
+                parallel.setData(5)
                 while  not coin_flip.isFinished:
                     coin_flip.draw()
                     win0.flip()
+                parallel.setData(0)
                 final_task_comb_array.append(test_task_comb[j])
             final_gamble_array.append("no")
             loss = loss_array[j]
-
             if outcome[j]==coin_heads[i]:
                 outcome_stim_l, loss = outcome_stim_learn(loss,1)
             else:
@@ -701,11 +738,16 @@ for i in range(4,5):
             outcome_stim_l.draw()
             final_loss_array.append(loss)
             win0.flip()
+            parallel.setData(6) # show outcome learning
             core.wait(1.5)
+            parallel.setData(0)
             # clear the Screen
             fixation_cross()
             win0.flip()
-            core.wait(.2)
+            parallel.setData(2)
+            core.wait(.1)
+            parallel.setData(0)
+            core.wait(.1)
             final_fix_time_array.append(.2)
             final_estimation_mu.append("NA")
             final_estimation_rangelow.append("NA")
@@ -720,24 +762,29 @@ for i in range(4,5):
                                          pos=(0,300),color = (-1,-1,-1),
                                          units = "pix", height = 32,wrapWidth=1500,
                                          alignText = "center")
+            pin = 12
         elif use_imagery[i]==1 and "comb" in task:
             imagery_info = visual.TextStim(win0,text="Next, you have the chance to use what you just learned about the coin distribution.\n The imagination trials are EQUALLY RELEVANT for your decision.\n Press ENTER to continue",
                                          pos=(0,300),color = (-1,-1,-1),wrapWidth=1500,
                                          units = "pix", height = 32,
                                          alignText = "center")
+            pin = 11
         elif "comb" not in task:
             imagery_info = visual.TextStim(win0,text="Next, you are have the chance to use what you just learned about the coin distribution.\n All trials are relevant for your decision.\n Press ENTER to continue",
                                          pos=(0,300),color = (-1,-1,-1),wrapWidth=1500,
                                          units = "pix", height = 32,
                                          alignText = "center")
+            pin = 13
+
 
         imagery_info.draw()
         win0.flip()
+        parallel.setData(pin)
         key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
         if 'return' in key:
             pass
         win0.flip()
-
+        parallel.setData(0)
         sure_options = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
             loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
             loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
@@ -747,9 +794,12 @@ for i in range(4,5):
                 fixation_cross()
                 # flip window onto the screen
                 win0.flip()
-                time_fixation = np.random.randint(500,1000)/1000
+                parallel.setData(2)
+                core.wait(.2)
+                parallel.setData(0)
+                time_fixation = 0.4
                 # wait 1 sec
-                core.wait(time_fixation)
+                core.wait(time_fixation-0.2)
                 win0.flip()
                 final_coin_side_1_array.append(coin_side_1[stim_coin[i]])
                 final_coin_side_2_array.append(coin_side_2[stim_coin[i]])
@@ -776,7 +826,10 @@ for i in range(4,5):
                 text_info.draw()
                 text_mu.draw()
                 win0.flip()
+                parallel.setData(14)
                 start_time = clock.getTime()
+                core.wait(0.05)
+                parallel.setData(0)
                 key = event.waitKeys(clearEvents = True,keyList = ['q','d','k'],
                                          maxWait = 9999)
                 if key is None:
@@ -790,12 +843,14 @@ for i in range(4,5):
                         sub_response_array.append(1)
                         stop_time = clock.getTime()
                         response_latency.append(round(stop_time-start_time,4)*1000)
+                        parallel.setData(7)
                     if 'k' in key: # j is for non match
                         print('pressed not gamble')
                         gamble = 0
                         sub_response_array.append(0)
                         stop_time = clock.getTime()
                         response_latency.append(round(stop_time-start_time,4)*1000)
+                        parallel.setData(8)
                     if 'q' in key:
                         sub_response_array.append(9999)
                         stop_time = clock.getTime()
@@ -809,6 +864,8 @@ for i in range(4,5):
                     loss = outcome_stim_gamble(sure_options[s],loss_array,1)
                 elif gamble==0:
                     loss = outcome_stim_gamble(sure_options[s],loss_array,0)
+                core.wait(0.05)
+                parallel.setData(0)
                 final_loss_array.append(loss)
                 final_task_comb_array.append("NA")
                 final_estimation_mu.append("NA")
@@ -820,6 +877,7 @@ for i in range(4,5):
                 final_use_imagery.append("NA")
         Value_Mu, text_mu = Value_slider_mu()
         continueRoutine = True
+        parallel.setData(15)
         while continueRoutine:
             Value_Mu.draw()
             text_mu.draw()
@@ -828,8 +886,10 @@ for i in range(4,5):
             if 'space' in keys:
                 if Value_Mu.getRating() is not None:
                     continueRoutine = False
+        parallel.setData(0)
         final_estimation_mu.append(Value_Mu.getRating())
         Value_conf, text_conf = Value_slider_confidence()
+        parallel.setData(17)
         continueRoutine = True
         while continueRoutine:
             Value_conf.draw()
@@ -839,9 +899,11 @@ for i in range(4,5):
             if 'space' in keys:
                 if Value_conf.getRating() is not None:
                     continueRoutine = False
+        parallel.setData(0)
         final_estimation_confidence_mu.append(Value_conf.getRating())
         Value_range_low, Value_range_high, text_range, text_low, text_high= Value_slider_range()
         continueRoutine = True
+        parallel.setData(16)
         while continueRoutine:
             Value_range_low.draw()
             Value_range_high.draw()
@@ -858,10 +920,12 @@ for i in range(4,5):
 
                     if completed_ratings == 2:
                         continueRoutine = False # end now
+        parallel.setData(0)
         final_estimation_rangelow.append(Value_range_low.getRating())
         final_estimation_range_high.append(Value_range_high.getRating())
         Value_conf, text_conf = Value_slider_confidence()
         continueRoutine = True
+        parallel.setData(17)
         while continueRoutine:
             Value_conf.draw()
             text_conf.draw()
@@ -870,6 +934,7 @@ for i in range(4,5):
             if 'space' in keys:
                 if Value_conf.getRating() is not None:
                     continueRoutine = False
+        parallel.setData(0)
         final_estimation_confidence_range.append(Value_conf.getRating())
         block_array.append(phase)
         trial_no.append(i)

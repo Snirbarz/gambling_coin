@@ -40,7 +40,7 @@ Stimuli: all presented at 80cm away from the screen
             Screen Width = 37.632cm
             Screen Height = 30.106cm
             # Pixels wide = 1280 X 1024
-            pixel_density_x (num_pixels per cm) = 1024/37.632 / 34.013
+            pixel_density_x (num_pixels per cm) = 1280/37.632 =34.02
     ParallelPort = 0x3EFC
 
             2- match fixation 00000001
@@ -301,7 +301,7 @@ def failed_task():
 break_flag=0
 parallel.setData(9)
 core.wait(0.1)
-#parallel.setData(0)
+parallel.setData(0)
 for b in range(1):
 
     # update the subject on what to do:
@@ -387,6 +387,7 @@ for b in range(1):
             response_latency.append(1000)
             print(response_latency[i])
             win0.flip()
+            parallel.setData(0)
             core.wait(.2)
         else:
             if 'd' in key: # d is for match
@@ -410,9 +411,11 @@ for b in range(1):
                 print(response_latency[i])
                 break_flag = 1
                 break
+
             feedback_stim(sub_response_array[i],match_array[i])
 
             win0.flip()
+            parallel.setData(0)
             core.wait(.2)
             if match_array[i] == 1 and sub_response_array[i] == 1:
                 no_trials[stim_image[i]] = no_trials[stim_image[i]] +1
