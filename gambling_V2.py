@@ -308,10 +308,10 @@ def Value_slider_mu():
                         style=('rating'))
     VAS.marker.color="green"
     VAS.marker.size =30
-    text = visual.TextStim(win = win0,text = "Select the average LOSS of real outcomes in the previous stage\n  When done, press SPACE",
+    text = visual.TextStim(win = win0,text = "בחר/י את ההפסד הממוצע של התוצאות האמיתיות בשלב הקודם. /n בסיום לחצו SPACE",
                            pos=(0,300),color = (-1,-1,-1),
                            units = "pix", height = 32,wrapWidth = 1200,
-                           alignText = "center"
+                           alignText = "center",languageStyle='RTL'
                           )
     return VAS, text # rate the average award trial
 # estimate range of losses
@@ -336,33 +336,37 @@ def Value_slider_range():
         VAS_high.marker.color="blue"
         VAS_low.marker.size =30
         VAS_high.marker.size =30
-        text = visual.TextStim(win = win0,text = "Select the largest and lowest LOSS of real outcomes in the previous stage\n  When done, press SPACE",
+        line_1 = "\n בחר/י את ההפסד הגבוה והנמוך ביותר של התוצאות האמיתיות בשלב הקודם \n"
+        line_2 = "\n כשאת/ה מסיים/ת לחצ/י SPACE \n"
+        text = visual.TextStim(win = win0,text = line_1+line_2,
                                pos=(0,300),color = (-1,-1,-1),
                                units = "pix", height = 32,wrapWidth = 1200,
-                               alignText = "center"
+                               alignText = "center",languageStyle='RTL'
                               )
-        text_low = visual.TextStim(win = win0,text = "Largest LOSS",
+        text_low = visual.TextStim(win = win0,text = "ההפסד הגדול ביותר",
                                pos=(0,50),color = (-1,-1,-1),
                                units = "pix", height = 32,wrapWidth = 1200,
-                               alignText = "center"
+                               alignText = "center",languageStyle='RTL'
                               )
-        text_high = visual.TextStim(win = win0,text = "Lowest LOSS",
+        text_high = visual.TextStim(win = win0,text = "ההפסד הקטן ביותר",
                                pos=(0,-250),color = (-1,-1,-1),
                                units = "pix", height = 32,wrapWidth = 1200,
-                               alignText = "center"
+                               alignText = "center",languageStyle='RTL'
                               )
 
         return VAS_low, VAS_high, text, text_low, text_high# rate the range trial
 # estimate confidenct
 def Value_slider_confidence():
-    text = visual.TextStim(win = win0,text = "How confident are you in your estimation?\n when done press SPACE",
+    line_1 = "\n כמה בטוח/ה את/ה בערכות שלך מ-0 עד 100 \n"
+    line_2 = "\n כשאת/ה מסיים/ת לחצ/י SPACE \n"
+    text = visual.TextStim(win = win0,text = line_1+line_2,
                            pos=(0,300),color = (-1,-1,-1),
                            units = "pix", height = 32,wrapWidth = 1000,
-                           alignText = "center"
+                           alignText = "center",languageStyle='RTL'
                           )
     VAS = visual.Slider(win =win0,
                         ticks = range(20), # values are from 0 to 20, but they need to be multiplied by 5
-                        labels = ["0- not confident at all","50 - moderately confident","100- very confident"],
+                        labels = ["0- אל חוטב ללכ","50 - חוטב הדימב תינוניב","100- חוטב דואמ "],
                         granularity =.1,
                         units = "pix",
                         size = [1000,50],
@@ -373,10 +377,10 @@ def Value_slider_confidence():
     return VAS, text # rate your confidence trial
 # wait text screen every 6 trials
 def wait_scr():
-    text = visual.TextStim(win = win0,text = "Please take a 30 seconds break",
+    text = visual.TextStim(win = win0,text = "בבקשה נוח/י למשך 30 שניות",
                            pos=(0,300),color = (-1,-1,-1),
                            units = "pix", height = 32,wrapWidth = 1200,
-                           alignText = "center"
+                           alignText = "center",languageStyle='RTL'
                           )
     text.draw()
 
@@ -385,10 +389,10 @@ core.wait(0.1)
 parallel.setData(0)
 # Our main program loop
 break_flag=0
-text_info = visual.TextStim(win0,text="Press ENTER to start",
+text_info = visual.TextStim(win0,text="לחצ/י ENTER על מנת להתחיל",
                              pos=(0,0),color = (-1,-1,-1),
                              units = "pix", height = 32,
-                             alignText = "center")
+                             alignText = "center",languageStyle='RTL')
 text_info.draw()
 win0.flip()
 
@@ -397,10 +401,16 @@ if 'return' in key:
     pass
 win0.flip()
 # update the subject on what to do:
-text_info_start = visual.TextStim(win0,text="In the following task, you will be requested to learn the distribution of coin flip outcomes.\n\n First, you will view both sides of the coin.\n\n Second, a coin flip will be generated with a random outcome.\n\n After learning the distribution you will be faced with a gambling choice. \n\n press ENTER to continue" ,
-                             pos=(0,0),color = (-1,-1,-1),
+
+line_1 =" \nבמטלה הבאה, תתבקש/י ללמוד את הערכים השונים האפשריים בהטלת המטבע\n"
+line_2 = "\nראשית, את/ה תצפה/י בשני צדי המטבע.\n"
+line_3 = "\nשנית, תופיע בפניך הטלת המטבע עם תוצאה אקראית שתופיע על המסך.\n"
+line_4 = "\nאחרי שלב הלמידה, תעבור/י לשלב הימורים הקשור למה שלמדת.\n"
+line_5 = "\nלחץ/י ENTER להמשיך\n"
+text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3+line_4+line_5,
+				             pos=(0,0),color = (-1,-1,-1),
                              units = "pix", height = 32,wrapWidth=1500,
-                             alignText = "center")
+                             alignText = "center",languageStyle='RTL')
 
 text_info_start.draw()
 win0.flip()
@@ -469,11 +479,12 @@ for i in range(28):
                 outcome = np.array([1,1,1,1,1,1,0,0,0,0,0,0])
             outcome = outcome[randomize]
             loss_array = loss_array[randomize]
-            text_info_start = visual.TextStim(win0,text="Please pay attention to the outcome of the coin flip \n\n press ENTER to continue" ,
-                                         pos=(0,0),color = (-1,-1,-1),
-                                         units = "pix", height = 32,wrapWidth=1500,
-                                         alignText = "center")
-
+            line_1 = "\n בבקשה שימ/י לב לתוצאות של הטלת המטבע \n"
+            line_2 = "\n לחץ/י ENTER להמשיך \n"
+            text_info_start = visual.TextStim(win0,text=line_1+line_2,
+                                pos=(0,0),color = (-1,-1,-1),
+                                units = "pix", height = 32,wrapWidth=1500,
+                                alignText = "center",languageStyle='RTL')
             text_info_start.draw()
             win0.flip()
             parallel.setData(10) # instructions learning
@@ -497,10 +508,15 @@ for i in range(28):
                 outcome = np.array([1,1,1,1,1,1,0,0,0,0,0,0])
             outcome = outcome[randomize]
             loss_array = loss_array[randomize]
-            text_info_start = visual.TextStim(win0,text="Now, the task will change. \n\n instead of viewing the outcome of the coin \n\n you will need to imagine in your mind AS IF the coin has a certain outcome \n\n the coin outcome will be highlighted in green \n\n press ENTER to continue" ,
-                                         pos=(0,0),color = (-1,-1,-1),
-                                         units = "pix", height = 32,wrapWidth=1500,
-                                         alignText = "center")
+            line_1 ="\nעכשיו המטלה תשתנה\n"
+            line_2 = "\nבמקום לצפות בתוצאות ההטלה של המטבע\n"
+            line_3 = "\nאתה תצטרך/י לדמיין בראשך כאילו למטבע יש תוצאה מסוימת\n"
+            line_4 = "\nהתוצאה המסוימת תהיה מודגשת בירוק\n"
+            line_5 = "\nלחץ/י ENTER להמשיך\n"
+            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3+line_4+line_5,
+                pos=(0,0),color = (-1,-1,-1),
+                units = "pix", height = 32,wrapWidth=1500,
+                alignText = "center",languageStyle='RTL')
 
             text_info_start.draw()
             win0.flip()
@@ -511,10 +527,13 @@ for i in range(28):
             win0.flip()
             parallel.setData(0)
         if i ==2: # first training trial with combined instructions
-            text_info_start = visual.TextStim(win0,text="Now, the task will include both observation trials and imagination trials. \n\n before each trial \n\n you will be told if it is an imagination trial or view trial \n\n press ENTER to continue" ,
-                                         pos=(0,0),color = (-1,-1,-1),
-                                         units = "pix", height = 32,wrapWidth=1500,
-                                         alignText = "center")
+            line_1 ="\nעכשיו, המטלה תכלול גם צעדי צפייה וצעדי דמיון\n"
+            line_2 = "\nבכל פעם יודגש בפניך אם צריך רק לצפות או רק ולדמיין\n"
+            line_3 = "\nלחץ/י ENTER להמשיך\n"
+            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
+				     		        pos=(0,0),color = (-1,-1,-1),
+                             		units = "pix", height = 32,wrapWidth=1500,
+                             		alignText = "center",languageStyle='RTL')
 
             text_info_start.draw()
             win0.flip()
@@ -591,10 +610,10 @@ for i in range(28):
             final_fix_time_array.append(time_fixation)
 
             if "view" in task:
-                text_view = visual.TextStim(win0,text="To VIEW the real coin flip outcome press SPACE" ,
+                text_view = visual.TextStim(win0,text="על מנת לצפות בתוצאה האמיתית של המטבע, לחץ/י SPACE" ,
                                              pos=(0,-300),color = (-1,-1,-1),
                                              units = "pix", height = 32,wrapWidth=1500,
-                                             alignText = "center")
+                                             alignText = "center",languageStyle='RTL')
             # draw the text onto the window
                 text_view.draw()
             # draw both coin sides onto the screen
@@ -623,12 +642,14 @@ for i in range(28):
                 parallel.setData(0)
                 final_task_comb_array.append("view")
             if "img" in task:
-                text_view = visual.TextStim(win0,text="Please imagine AS IF the coin outcome is marked in green\n press SPACE to continue" ,
-                                             pos=(0,-300),color = (-1,-1,-1),
-                                             units = "pix", height = 32,wrapWidth=1500,
-                                             alignText = "center")
+                line_1 ="\n בבקשה דמיין/י כאילו התוצאה המסומת בירוק היא התוצאה של ההטלה\n"
+                line_2 = "\nלחץ/י SPACE להמשיך\n"
+                text_info_start = visual.TextStim(win0,text=line_1+line_2,
+				     		        pos=(0,0),color = (-1,-1,-1),
+                            		units = "pix", height = 32,wrapWidth=1500,
+                            		alignText = "center",languageStyle='RTL')
             # draw the text onto the window
-                text_view.draw()
+                text_info_start.draw()
                 if outcome[j]==0:
                     outcome_circle = visual.Circle(win = win0, lineColor = "green",edges = 180,
                                                     lineWidth = 30,
@@ -671,10 +692,12 @@ for i in range(28):
                 parallel.setData(0)
             if "comb" in task:
                 if test_task_comb[j] =="img":
-                    text_view = visual.TextStim(win0,text="Please imagine AS IF the coin outcome is marked in green\n press SPACE to continue" ,
-                                                pos=(0,-300),color = (-1,-1,-1),
-                                                units = "pix", height = 32,wrapWidth=1500,
-                                                alignText = "center")
+                    line_1 ="\n בבקשה דמיין/י כאילו התוצאה המסומת בירוק היא התוצאה של ההטלה\n"
+                    line_2 = "\nלחץ/י SPACE להמשיך\n"
+                    text_info_start = visual.TextStim(win0,text=line_1+line_2,
+				     		        pos=(0,-300),color = (-1,-1,-1),
+                            		units = "pix", height = 32,wrapWidth=1500,
+                            		alignText = "center",languageStyle='RTL')
                 # draw the text onto the window
                     if outcome[j]==0:
                         outcome_circle = visual.Circle(win = win0, lineColor = "green",edges = 180,
@@ -689,10 +712,10 @@ for i in range(28):
                                                         pos = (270,0))
                         outcome_circle.draw()
                 if test_task_comb[j] == "view":
-                    text_view = visual.TextStim(win0,text="To VIEW the real coin flip outcome press SPACE",
+                    text_view = visual.TextStim(win0,text="על מנת לצפות בתוצאה האמיתית של המטבע, לחץ/י ENTER",
                                                 pos=(0,-300),color = (-1,-1,-1),
                                                 units = "pix", height = 32,wrapWidth=1500,
-                                                alignText = "center")
+                                                alignText = "center",languageStyle='RTL')
 
             # draw the text onto the window
                 text_view.draw()
@@ -758,26 +781,35 @@ for i in range(28):
 
         # gambling part:
         if use_imagery[i]==0 and "comb" in task:
-            imagery_info = visual.TextStim(win0,text="Next, you have the chance to use what you just learned about the coin distribution.\n However, the imagination trials are NOT relevant for your decision.\n Press ENTER to continue",
-                                         pos=(0,300),color = (-1,-1,-1),
-                                         units = "pix", height = 32,wrapWidth=1500,
-                                         alignText = "center")
+            line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
+            line_2 = "\nאבל, התוצאות שהתקבלו בדמיון, אינם רלבנטיות להחלטה שלך\n"
+            line_3 = "\nלחץ/י ENTER להמשיך\n"
+            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
+				     		        pos=(0,0),color = (-1,-1,-1),
+                             		units = "pix", height = 32,wrapWidth=1500,
+                             		alignText = "center",languageStyle='RTL')
             pin = 12
         elif use_imagery[i]==1 and "comb" in task:
-            imagery_info = visual.TextStim(win0,text="Next, you have the chance to use what you just learned about the coin distribution.\n The imagination trials are EQUALLY RELEVANT for your decision.\n Press ENTER to continue",
-                                         pos=(0,300),color = (-1,-1,-1),wrapWidth=1500,
-                                         units = "pix", height = 32,
-                                         alignText = "center")
+            line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
+            line_2 = "\nהתוצאות שהתקבלו בדמיון רלבנטיות במידה דומה לשאר התוצאות בהחלטה שלך\n"
+            line_3 = "\nלחץ/י ENTER להמשיך\n"
+            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
+				     		        pos=(0,0),color = (-1,-1,-1),
+                             		units = "pix", height = 32,wrapWidth=1500,
+                             		alignText = "center",languageStyle='RTL')
             pin = 11
         elif "comb" not in task:
-            imagery_info = visual.TextStim(win0,text="Next, you are have the chance to use what you just learned about the coin distribution.\n All trials are relevant for your decision.\n Press ENTER to continue",
-                                         pos=(0,300),color = (-1,-1,-1),wrapWidth=1500,
-                                         units = "pix", height = 32,
-                                         alignText = "center")
+            line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
+            line_2 = "\nכל צעדי הניסוי רלבנטיים להחלטה שלך\n"
+            line_3 = "\nלחץ/י ENTER להמשיך\n"
+            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
+				     		        pos=(0,0),color = (-1,-1,-1),
+                             		units = "pix", height = 32,wrapWidth=1500,
+                             		alignText = "center",languageStyle='RTL')
             pin = 13
 
 
-        imagery_info.draw()
+        text_info_start.draw()
         win0.flip()
         parallel.setData(pin)
         key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
@@ -785,10 +817,25 @@ for i in range(28):
             pass
         win0.flip()
         parallel.setData(0)
+        line_1 ="\nלחץ/י D אם את/ה רוצה להמר על תוצאות המטבע\n"
+        line_2 = "\nאחרת, לחצ/י K אם את/ה מעדיפ/ה לקבל חצי מההפסד למטה\n"
+        line_3 = "\nלחץ/י ENTER להמשיך\n"
+        text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
+                             pos=(0,0),color = (-1,-1,-1),
+                            units = "pix", height = 32,wrapWidth=1500,
+                            alignText = "center",languageStyle='RTL')
+        text_info_start.draw()
+        win0.flip()
+        parallel.setData(pin)
+        key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
+        if 'return' in key:
+            pass
+        win0.flip()
         sure_options = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
             loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
             loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
-        for l in range(1):
+        print("gamble")
+        for l in range(5):
             np.random.shuffle(sure_options)
             for s in range(6):
                 fixation_cross()
@@ -814,16 +861,21 @@ for i in range(28):
                 final_head_array.append(coin_heads[i])
                 final_outcome_array.append("NA")
                 final_task_array.append(task)
-                text_info = visual.TextStim(win0,text="Press d if you want to gamble on the outcome of the coin\n otherwise, press k if you prefer to receive the half of loss below",
-                                             pos=(0,300),color = (-1,-1,-1),
-                                             units = "pix", height = 32,wrapWidth=1500,
-                                             alignText = "center")
                 text_mu = visual.TextStim(win0,text=sure_options[s],
-                                             pos=(0,-200),color = (-1,-1,-1),
+                                             pos=(200,-20),color = (-1,-1,-1),
                                              units = "pix", height = 32,wrapWidth=1500,
                                              alignText = "center")
-                image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
-                text_info.draw()
+                text_half = visual.TextStim(win0,text="חצי",
+                                             pos=(200,20),color = (-1,-1,-1),
+                                             units = "pix", height = 32,wrapWidth=1500,
+                                             alignText = "center",languageStyle="RTL")
+                # image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
+                text_coin = visual.TextStim(win0,text="מטבע",
+                                             pos=(-200,0),color = (-1,-1,-1),
+                                             units = "pix", height = 32,wrapWidth=1500,
+                                             alignText = "center",languageStyle="RTL")
+                text_half.draw()
+                text_coin.draw()
                 text_mu.draw()
                 win0.flip()
                 parallel.setData(14)

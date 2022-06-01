@@ -1,32 +1,32 @@
-import pyglet
-from pyglet import clock
-from pyglet.window import key
-from pyglet.gl import *
 import os
-import math
+# Clear the command output
+from psychopy import logging, visual, core, event, clock, gui
+from datetime  import datetime
 import numpy as np
-from PIL import Image
-import io
-pyglet.options['debug_gl'] = False
+import pandas as pd
+import pathlib
 
+win0 = visual.Window(size = (1280,1024),
+                     units = "pix",
+                     colorSpace = "rgb1",
+                     color = (.6,.6,.6),
+                     screen = 2,
+                     monitor = 'testMonitor',
+                     fullscr = True,
+                     allowGUI = True
+                     )
 
-conditionsList = ["img","view"]
-trialList = []
-trialList.append(np.random.permutation(conditionsList)[0:2])
-for i in range(5):
-    trialList.append(np.random.permutation(conditionsList)[0:2])
-trialList = np.array(trialList).flatten()
-outcome_view = np.array([0,0,0,1,1,1])
-outcome_view = np.random.permutation(outcome_view)
-outcome_img = np.array([0,0,0,1,1,1])
-outcome_img = np.random.permutation(outcome_img)
-ind_view = np.where(trialList == "view")
-ind_img = np.where(trialList == "img")
-print(outcome_view)
-print(ind_view)
-print(outcome_img)
-print(ind_img)
-outcome = np.array([0,0,0,0,0,0,0,0,0,0,0,0])
-outcome[ind_view] = outcome_view
-outcome[ind_img] = outcome_img
-print(outcome)
+text_mu = visual.TextStim(win0,text="חצי" +"\n\n 1",
+                             pos=(200,0),color = (-1,-1,-1),
+                             units = "pix", height = 32,wrapWidth=1500,
+                             alignText = "center",languageStyle="RTL")
+# image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
+text_coin = visual.TextStim(win0,text="מטבע",
+                             pos=(-200,0),color = (-1,-1,-1),
+                             units = "pix", height = 32,wrapWidth=1500,
+                             alignText = "center",languageStyle="RTL")
+text_coin.draw()
+text_mu.draw()
+win0.flip()
+core.wait(3)
+win0.flip()
