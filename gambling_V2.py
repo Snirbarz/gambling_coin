@@ -154,7 +154,7 @@ final_estimation_range_high = [] # participant estimation of the high range
 final_estimation_confidence_mu = [] # participant confidence on mu estimation
 final_estimation_confidence_range = [] # participant confidence on range estimation
 final_use_imagery = [] # participant is instructed to use imagery or not (1 or 0)
-
+final_sure_option = [] #what was the sure option presented to participants
 
 # Subject ID:
 sub_id = show_dlg[1]
@@ -308,7 +308,7 @@ def Value_slider_mu():
                         style=('rating'))
     VAS.marker.color="green"
     VAS.marker.size =30
-    text = visual.TextStim(win = win0,text = "בחר/י את ההפסד הממוצע של התוצאות האמיתיות בשלב הקודם. /n בסיום לחצו SPACE",
+    text = visual.TextStim(win = win0,text = "בחר/י את ההפסד הממוצע של התוצאות האמיתיות בשלב הקודם. \n בסיום לחצו SPACE",
                            pos=(0,300),color = (-1,-1,-1),
                            units = "pix", height = 32,wrapWidth = 1200,
                            alignText = "center",languageStyle='RTL'
@@ -370,8 +370,8 @@ def Value_slider_confidence():
                         granularity =.1,
                         units = "pix",
                         size = [1000,50],
-                        pos = [0,-300],
-                        style=('rating'),labelWrapWidth = 20,labelHeight=20)
+                        pos = [0,0],
+                        style=('rating'),labelWrapWidth = 30,labelHeight=30)
     VAS.marker.color="red"
     VAS.marker.size =30
     return VAS, text # rate your confidence trial
@@ -420,7 +420,7 @@ if 'return' in key:
     pass
 win0.flip()
 parallel.setData(0)
-for i in range(28):
+for i in range(1,2):
         # if trial i is between 0 and 3 (included) then it is training blocks
         # if trials i >=4 then it is test blcok
         if i<4:
@@ -450,15 +450,9 @@ for i in range(28):
                 task = test_task[3]
         outcome = np.array([0,0,0,0,0,0,1,1,1,1,1,1])# is the outcome left or right (0 or 1)
         loss_Mu  = Mu[stim_generate[i]] # what is the mu for the current trial i
-        if SD[stim_generate[i]] == "HH": # what is the SD for the current trial i
-            loss_SD_img = 4 # high range
-            loss_SD_view = 4
-        elif SD[stim_generate[i]] == "LH":
+        if SD[stim_generate[i]] == "LH":
             loss_SD_img = 1 # low range
             loss_SD_view = 4
-        elif SD[stim_generate[i]] == "LL":
-            loss_SD_img = 1
-            loss_SD_view = 1
         elif SD[stim_generate[i]] == "HL":
             loss_SD_img = 4
             loss_SD_view = 1
@@ -473,7 +467,7 @@ for i in range(28):
                 loss_Mu - loss_SD_view,loss_Mu-loss_SD_view])
             randomize = np.arange(len(outcome))
             np.random.shuffle(randomize)
-            if coin_heads[i]==1:# if coin heads is 1 then loss is received whenever the right image is drawn as outcome
+            if coin_heads[i]==1:# if coin heads is 1 then higher than avg loss is received whenever the right image is drawn as outcome
                 outcome = np.array([0,0,0,0,0,0,1,1,1,1,1,1])
             else:
                 outcome = np.array([1,1,1,1,1,1,0,0,0,0,0,0])
@@ -645,7 +639,7 @@ for i in range(28):
                 line_1 ="\n בבקשה דמיין/י כאילו התוצאה המסומת בירוק היא התוצאה של ההטלה\n"
                 line_2 = "\nלחץ/י SPACE להמשיך\n"
                 text_info_start = visual.TextStim(win0,text=line_1+line_2,
-				     		        pos=(0,0),color = (-1,-1,-1),
+				     		        pos=(0,-300),color = (-1,-1,-1),
                             		units = "pix", height = 32,wrapWidth=1500,
                             		alignText = "center",languageStyle='RTL')
             # draw the text onto the window
@@ -694,7 +688,7 @@ for i in range(28):
                 if test_task_comb[j] =="img":
                     line_1 ="\n בבקשה דמיין/י כאילו התוצאה המסומת בירוק היא התוצאה של ההטלה\n"
                     line_2 = "\nלחץ/י SPACE להמשיך\n"
-                    text_info_start = visual.TextStim(win0,text=line_1+line_2,
+                    text_view = visual.TextStim(win0,text=line_1+line_2,
 				     		        pos=(0,-300),color = (-1,-1,-1),
                             		units = "pix", height = 32,wrapWidth=1500,
                             		alignText = "center",languageStyle='RTL')
@@ -712,7 +706,7 @@ for i in range(28):
                                                         pos = (270,0))
                         outcome_circle.draw()
                 if test_task_comb[j] == "view":
-                    text_view = visual.TextStim(win0,text="על מנת לצפות בתוצאה האמיתית של המטבע, לחץ/י ENTER",
+                    text_view = visual.TextStim(win0,text="על מנת לצפות בתוצאה האמיתית של המטבע, לחץ/י SPACE",
                                                 pos=(0,-300),color = (-1,-1,-1),
                                                 units = "pix", height = 32,wrapWidth=1500,
                                                 alignText = "center",languageStyle='RTL')
@@ -771,14 +765,13 @@ for i in range(28):
             core.wait(.1)
             parallel.setData(0)
             core.wait(.1)
-            final_fix_time_array.append(.2)
             final_estimation_mu.append("NA")
             final_estimation_rangelow.append("NA")
             final_estimation_range_high.append("NA")
             final_estimation_confidence_mu.append("NA")
             final_estimation_confidence_range.append("NA")
             final_use_imagery.append("NA")
-
+            final_sure_option.append("NA")
         # gambling part:
         if use_imagery[i]==0 and "comb" in task:
             line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
@@ -834,6 +827,10 @@ for i in range(28):
         sure_options = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
             loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
             loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
+        if i==1: # for the one trial where there is only imagery
+            sure_options = np.array([loss_Mu+loss_SD_img+1,loss_Mu+loss_SD_img-1,
+                loss_Mu+loss_SD_img,loss_Mu-loss_SD_img-1,
+                loss_Mu-loss_SD_img+1,loss_Mu-loss_SD_img])
         print("gamble")
         for l in range(5):
             np.random.shuffle(sure_options)
@@ -861,6 +858,7 @@ for i in range(28):
                 final_head_array.append(coin_heads[i])
                 final_outcome_array.append("NA")
                 final_task_array.append(task)
+                final_sure_option.append(sure_options[s])
                 text_mu = visual.TextStim(win0,text=sure_options[s],
                                              pos=(200,-20),color = (-1,-1,-1),
                                              units = "pix", height = 32,wrapWidth=1500,
@@ -1006,6 +1004,8 @@ for i in range(28):
         final_gamble_array.append("no")
         final_loss_array.append("NA")
         final_use_imagery.append("NA")
+        final_fix_time_array.append("NA")
+        final_sure_option.append("NA")
         if break_flag==1:
             break
 '''
@@ -1032,6 +1032,7 @@ print(len(final_estimation_rangelow))
 print(len(final_estimation_range_high))
 print(len(final_estimation_confidence_mu))
 print(len(final_estimation_confidence_range))
+print(len(final_sure_option))
 '''
 # create a data frame:
 output_file = pd.DataFrame({'trial':trial_no,
@@ -1056,7 +1057,8 @@ output_file = pd.DataFrame({'trial':trial_no,
                             'est_high':final_estimation_range_high,
                             'conf_mu':final_estimation_confidence_mu,
                             'conf_range':final_estimation_confidence_range,
-                            'current_task':final_task_comb_array})
+                            'current_task':final_task_comb_array,
+                            'sure_option':final_sure_option})
 
 # create the save file path
 
