@@ -1,5 +1,6 @@
 from panda3d.core import *
 from direct.showbase.ShowBase import ShowBase
+from panda3d.core import loadPrcFileData
 from direct.task import Task
 loadPrcFileData("", "load-file-type p3assimp")
 from math import *
@@ -7,7 +8,7 @@ from direct.interval.IntervalGlobal import Sequence
 import time
 import os
 import numpy as np
-
+loadPrcFileData("", "win-size 1280 1024")
 # ffmpeg -y -framerate 30 -f image2 -i frame_%04d.png -q:a 2 -q:v 4 -vcodec wmv2 -acodec wmav2 out.avi
 
 class MyApp(ShowBase):
@@ -24,7 +25,7 @@ class MyApp(ShowBase):
         self.model.setHpr(self.model, 0,90,0)
         self.model.reparent_to(self.render)
         self.myInterval1 = self.model.hprInterval(1, Vec3(0,90,1080))
-
+        self.setBackgroundColor(0,0,0)
         # Add the spinCameraTask procedure to the task manager.
         self.taskMgr.add(self.spinCameraTask, "SpinCameraTask")
         self.taskMgr.add(self.update_texture,"update texture")
@@ -45,7 +46,7 @@ class MyApp(ShowBase):
     def taskStop(task):
         base.graphicsEngine.removeAllWindows()
     def save(self,task):
-        os.system("ffmpeg -y -framerate 30 -f image2 -i record/coin0"+self.side_1+'0'+self.side_2+'0'+self.side_1+"frame_%04d.png -q:a 2 -q:v 4 -vcodec wmv2 -acodec wmav2 coin0"+self.side_1+'0'+self.side_2+'0'+self.side_1+".avi")
+        os.system("ffmpeg -y -framerate 30 -f image2 -i record/coin0"+self.side_1+'0'+self.side_2+'0'+self.side_1+"frame_%04d.png -q:v 1 -vcodec wmv2 coin0"+self.side_1+'0'+self.side_2+'0'+self.side_1+".avi")
         # Task.done
         # return Task.again
         # Define a procedure to move the camera.
