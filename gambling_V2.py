@@ -420,7 +420,7 @@ if 'return' in key:
     pass
 win0.flip()
 parallel.setData(0)
-for i in range(1,2):
+for i in range(12):
         # if trial i is between 0 and 3 (included) then it is training blocks
         # if trials i >=4 then it is test blcok
         if i<4:
