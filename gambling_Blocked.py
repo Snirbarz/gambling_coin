@@ -206,7 +206,7 @@ win0.flip()
 while  not flip.isFinished:
      flip.draw()
      win0.flip()
-
+coin_flip._closeMedia()
 
 # create our fixation cross
 def fixation_cross():
@@ -666,6 +666,7 @@ for i in range(2,3):
                 while  not coin_flip.isFinished:
                     coin_flip.draw()
                     win0.flip()
+                coin_flip._closeMedia()
                 parallel.setData(0)
                 final_task_comb_array.append("view")
             if "img" in task:
@@ -715,8 +716,10 @@ for i in range(2,3):
                 while  not coin_flip.isFinished:
                     coin_flip.draw()
                     win0.flip()
-                final_task_comb_array.append("img")
                 parallel.setData(0)
+                final_task_comb_array.append("img")
+                coin_flip._closeMedia()
+
             if "comb" in task:
                 if test_task_comb[j] =="img":
                     line_1 ="\n בבקשה דמיין/י כאילו התוצאה המסומת בירוק היא התוצאה של ההטלה\n"
@@ -777,6 +780,7 @@ for i in range(2,3):
                 while  not coin_flip.isFinished:
                     coin_flip.draw()
                     win0.flip()
+                parallel.setData(0)
                 parallel.setData(0)
                 final_task_comb_array.append(test_task_comb[j])
             final_gamble_array.append("no")
