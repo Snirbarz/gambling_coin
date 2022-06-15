@@ -180,10 +180,10 @@ win0 = visual.Window(size = (1280,1024),
                      )
 
 # 'wait for subjects to press enter when ready'
-text_info = visual.TextStim(win0,text="Press Enter to continue",
+text_info = visual.TextStim(win0,text="לחץ/י ENTER בכדי להמשיך",
                              pos=(0,0),color = (-1,-1,-1),
                              units = "pix", height = 32,
-                             alignHoriz = "right")
+                             alignHoriz = "center",languageStyle='RTL')
 
 text_info.draw()
 win0.flip()
@@ -290,10 +290,13 @@ def feedback_stim(response,match):
 
     feedback.draw()
 def failed_task():
-    text_info = visual.TextStim(win0,text="Unforunantely, you did not pass our inclusion criteria.\n The study will now end.\n Please call the research assistant.",
+    line_1 = "לצערנו, לא עברת את קריטריון ההכלה שלנו. /n"
+    line_2 = "המחקר יסתיים עכשיו. /n"
+    line_3 = "יש לקרוא לנסיין. /n"
+    text_info = visual.TextStim(win0,text=line_1 + line_2 + line_3,
                                  pos=(0,0),color = (-1,-1,-1),
                                  units = "pix", height = 32,
-                                 alignHoriz = "right")
+                                 alignHoriz = "center",languageStyle = "RTL")
     text_info.draw()
 # task start (set data 9)
 
@@ -305,14 +308,16 @@ parallel.setData(0)
 for b in range(1):
 
     # update the subject on what to do:
-    text_info = visual.TextStim(win0,text="Press d if the image matches the previous word, else press k  ",
+    line_1 = "\nלחץ/י D אם התמונה תואמת לתמונה המקדימה אותה\n"
+    line_2 = "אחרת לחץ/י K"
+    text_info = visual.TextStim(win0,text=line_1 + line_2,
                                  pos=(0,0),color = (-1,-1,-1),
-                                 units = "pix", height = 32,
-                                 alignHoriz = "right")
-    text_info_start = visual.TextStim(win0,text="Press any key to start " ,
+                                 units = "pix", height = 32,wrapWidth=1500,
+                                 alignHoriz = "center",languageStyle = "RTL")
+    text_info_start = visual.TextStim(win0,text="לחץ/י כל מקש להתחיל" ,
                                  pos=(0,-200),color = (-1,-1,-1),
                                  units = "pix", height = 32,
-                                 alignHoriz = "right")
+                                 alignHoriz = "center",languageStyle = "RTL")
     text_info.draw()
     text_info_start.draw()
     win0.flip()
