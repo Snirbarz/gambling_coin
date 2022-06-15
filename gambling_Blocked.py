@@ -11,11 +11,9 @@ Stimuli: all presented at 80cm away from the screen
               If they don't gamble they lost half of the amount.
     Stimulus: 8 images from the exposure task
               clustered into 28 pairs, each representing a single double sided coin
-<<<<<<< HEAD
               for each coin participant   view or imagine an outcome
 =======
               for each coin participant view or imagine an outcome
->>>>>>> 55aa93b4b8821de873e5eb685fc13d1d3bb7b664
               When coin lands on heads- an outcome of 0 will be presented
               When coin lands on tails an outcome mu ([-6,-8,-10]) and sd (1 or 2) will be generated
               10 trials total, non biased coin (pseudorandomized).
@@ -206,7 +204,7 @@ win0.flip()
 while  not flip.isFinished:
      flip.draw()
      win0.flip()
-coin_flip._closeMedia()
+flip._closeMedia()
 
 # create our fixation cross
 def fixation_cross():
@@ -424,7 +422,7 @@ if 'return' in key:
     pass
 win0.flip()
 parallel.setData(0)
-for i in range(2,3):
+for i in range(10):
         # if trial i is between 0 and 3 (included) then it is training blocks
         # if trials i >=4 then it is test blcok
         if i<4:
@@ -542,20 +540,16 @@ for i in range(2,3):
             win0.flip()
             parallel.setData(0)
         # create imagination and view trial such that no more than 2 trials in a row are img or view
-<<<<<<< HEAD
         test_task_comb = np.repeat("view",12)
         test_task_comb= np.array([test_task_comb,np.repeat("img",12)]).flatten()
-=======
         conditionsList = np.repeat("view",12)
         conditionsList= np.array([conditionsList,np.repeat("img",12)]).flatten()
->>>>>>> 55aa93b4b8821de873e5eb685fc13d1d3bb7b664
         # create loss for imagination and view trials separately.
         if "comb" in task:
             outcome_view_tmp = []
             outcome_img_tmp = []
             loss_array_view_tmp = []
             loss_array_img_tmp = []
-<<<<<<< HEAD
 
             for l in range(2):
                 loss_array_view = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
@@ -564,7 +558,6 @@ for i in range(2,3):
                 loss_array_img = np.array([loss_Mu + loss_SD_img+1,loss_Mu+loss_SD_img-1,
                     loss_Mu + loss_SD_img,loss_Mu-loss_SD_img-1,
                     loss_Mu - loss_SD_img+1,loss_Mu-loss_SD_img])
-=======
             loss_array_view = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
                 loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
                 loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
@@ -572,7 +565,7 @@ for i in range(2,3):
                 loss_Mu + loss_SD_img,loss_Mu-loss_SD_img-1,
                 loss_Mu - loss_SD_img-1,loss_Mu-loss_SD_img])
             for i in range(2):
->>>>>>> 55aa93b4b8821de873e5eb685fc13d1d3bb7b664
+
                 randomize_view = np.arange(len(loss_array_view))
                 randomize_img = np.arange(len(loss_array_img))
                 np.random.shuffle(randomize_view)
@@ -587,7 +580,6 @@ for i in range(2,3):
                 loss_array_view = loss_array_view[randomize_view]
                 outcome_img = outcome_img[randomize_img]
                 loss_array_img = loss_array_img[randomize_img]
-<<<<<<< HEAD
                 outcome_view_tmp = [*outcome_view_tmp,*outcome_view]
                 outcome_img_tmp = [*outcome_img_tmp,*outcome_img]
                 loss_array_view_tmp = [*loss_array_view_tmp,*loss_array_view]
@@ -595,15 +587,7 @@ for i in range(2,3):
             outcome = [*outcome_view_tmp,*outcome_img_tmp]
             loss_array = [*loss_array_view_tmp,*loss_array_img_tmp]
             print(outcome)
-=======
-                outcome_view_tmp = [outcome_view_tmp,outcome_view]
-                outcome_img_tmp = [outcome_img_tmp,outcome_img]
-                loss_array_view_tmp = [loss_array_view_tmp,loss_array_view]
-                loss_array_img_tmp  = [loss_array_img_tmp,loss_array_img]
-            outcome = [outcome_view_tmp,outcome_img_tmp]
-            loss_array = [loss_array_view_tmp,loss_array_img_tmp]
             print(np.array(outcome).flatten())
->>>>>>> 55aa93b4b8821de873e5eb685fc13d1d3bb7b664
             print(loss_array)
         for j in range(len(outcome)):
             block_array.append(phase)
@@ -781,8 +765,8 @@ for i in range(2,3):
                     coin_flip.draw()
                     win0.flip()
                 parallel.setData(0)
-                parallel.setData(0)
                 final_task_comb_array.append(test_task_comb[j])
+                coin_flip._closeMedia()
             final_gamble_array.append("no")
             loss = loss_array[j]
             if outcome[j]==coin_heads[i]:
