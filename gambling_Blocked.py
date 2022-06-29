@@ -207,6 +207,37 @@ while  not flip.isFinished:
 flip._closeMedia()
 
 # create our fixation cross
+def save_results(save_file_name):
+    # create a data frame:
+    output_file = pd.DataFrame({'trial':trial_no,
+                                'time': time_value_array,
+                                'id':sub_id_array,
+                                'Date':date_value_array,
+                                'fix_time':final_fix_time_array,
+                                'response':sub_response_array,
+                                'side_1_stim':final_coin_side_1_array,
+                                'side_2_stim':final_coin_side_2_array,
+                                'latency':response_latency,
+                                'Block':block_array,
+                                'Mu':final_Mu_array,
+                                'SD':final_SD_array,
+                                'head':final_head_array,
+                                'outcome':final_outcome_array,
+                                'task':final_task_array,
+                                'gamble_trial':final_gamble_array,
+                                'loss':final_loss_array,
+                                'est_mu':final_estimation_mu,
+                                'est_low':final_estimation_rangelow,
+                                'est_high':final_estimation_range_high,
+                                'conf_mu':final_estimation_confidence_mu,
+                                'conf_range':final_estimation_confidence_range,
+                                'current_task':final_task_comb_array,
+                                'sure_option':final_sure_option})
+    # save the file
+    output_file.to_csv(save_file_name,sep = ",",index=False)
+
+
+
 def fixation_cross():
     '''
     We will create our fixation_cross
@@ -422,7 +453,7 @@ if 'return' in key:
     pass
 win0.flip()
 parallel.setData(0)
-for i in range(10):
+for i in range(28):
         # if trial i is between 0 and 3 (included) then it is training blocks
         # if trials i >=4 then it is test blcok
         if i<4:
@@ -1027,8 +1058,11 @@ for i in range(10):
         final_use_imagery.append("NA")
         final_fix_time_array.append("NA")
         final_sure_option.append("NA")
+
+        save_results(save_file_name)
         if break_flag==1:
             break
+
 '''
 print(len(trial_no))
 print(len(time_value_array))
@@ -1056,35 +1090,12 @@ print(len(final_estimation_confidence_range))
 print(len(final_sure_option))
 '''
 # create a data frame:
-output_file = pd.DataFrame({'trial':trial_no,
-                            'time': time_value_array,
-                            'id':sub_id_array,
-                            'Date':date_value_array,
-                            'fix_time':final_fix_time_array,
-                            'response':sub_response_array,
-                            'side_1_stim':final_coin_side_1_array,
-                            'side_2_stim':final_coin_side_2_array,
-                            'latency':response_latency,
-                            'Block':block_array,
-                            'Mu':final_Mu_array,
-                            'SD':final_SD_array,
-                            'head':final_head_array,
-                            'outcome':final_outcome_array,
-                            'task':final_task_array,
-                            'gamble_trial':final_gamble_array,
-                            'loss':final_loss_array,
-                            'est_mu':final_estimation_mu,
-                            'est_low':final_estimation_rangelow,
-                            'est_high':final_estimation_range_high,
-                            'conf_mu':final_estimation_confidence_mu,
-                            'conf_range':final_estimation_confidence_range,
-                            'current_task':final_task_comb_array,
-                            'sure_option':final_sure_option})
 
-# create the save file path
+
+
 
 # save the file
-output_file.to_csv(save_file_name,sep = ",",index=False)
+save_results()
 # tidy up our resorces
 win0.close()
 print("OK, program has now closed")
