@@ -171,11 +171,12 @@ for n in range(no_trials):
     stim_generate.append(new_generate_array[n])
     cur_time_array.append(datetime.now().strftime('%H%M%S'))
 stim_coin = np.array(stim_coin).flatten()
+print(stim_coin)
 stim_generate = np.array(stim_generate).flatten()
 cur_time_array = np.array(cur_time_array).flatten()
 
 # create gamble array
-logging.console.setLevel(logging.WARNING) # log warning messages
+logging.console.setLevel(logging.DEBUG) # log warning messages
 print("*************************************")
 print("PSYCHOPY LOGGING set to : WARNING")
 print(datetime.now())
@@ -341,7 +342,7 @@ def Value_slider_mu():
                         style=('rating'))
     VAS.marker.color="green"
     VAS.marker.size =30
-    text = visual.TextStim(win = win0,text = "בחר/י את ההפסד הממוצע של התוצאות האמיתיות בשלב הקודם. \n בסיום לחצו SPACE",
+    text = visual.TextStim(win = win0,text = "בחר/י את ההפסד הממוצע של התוצאות האמיתיות של המטבע בשלב הלמידה. \n בסיום לחצו SPACE",
                            pos=(0,300),color = (1,1,1),
                            units = "pix", height = 32,wrapWidth = 1200,
                            alignText = "center",languageStyle='RTL'
@@ -390,7 +391,7 @@ def Value_slider_range():
         return VAS_low, VAS_high, text, text_low, text_high# rate the range trial
 # estimate confidenct
 def Value_slider_confidence():
-    line_1 = "\n כמה בטוח/ה את/ה בערכות שלך מ-0 עד 100 \n"
+    line_1 = "\n כמה בטוח/ה את/ה בהערכות שלך מ-0 עד 100 \n"
     line_2 = "\n כשאת/ה מסיים/ת לחצ/י SPACE \n"
     text = visual.TextStim(win = win0,text = line_1+line_2,
                            pos=(0,300),color = (1,1,1),
@@ -399,7 +400,7 @@ def Value_slider_confidence():
                           )
     VAS = visual.Slider(win =win0,
                         ticks = range(20), # values are from 0 to 20, but they need to be multiplied by 5
-                        labels = ["0- אל חוטב ללכ","50 - חוטב הדימב תינוניב","100- חוטב דואמ "],
+                        labels = ["0- אל חוטב ללכ","50 - חוטב הדימב תינוניב","100 - חוטב דואמ "],
                         granularity =.1,
                         units = "pix",
                         size = [1000,50],
@@ -491,7 +492,7 @@ for i in range(28):
             loss_SD_view = 1
         # create loss array for view trials, imagination trials, and combined imagination and view trials.
         loss_array = np.array([0,0,0,0,0,0,0,0,0,0,0,0])
-        if i ==0: #view trial
+        if i ==0: #view trial training
             loss_array = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view+1,
                 loss_Mu+loss_SD_view-1,loss_Mu+loss_SD_view-1,
                 loss_Mu+loss_SD_view,loss_Mu+loss_SD_view,
@@ -520,7 +521,7 @@ for i in range(28):
                 pass
             win0.flip()
             parallel.setData(0)
-        if i ==1: # imagination trial
+        if i ==1: # imagination trial training
             loss_array = np.array([loss_Mu + loss_SD_img+1,loss_Mu+loss_SD_img+1,
                 loss_Mu + loss_SD_img-1,loss_Mu+loss_SD_img-1,
                 loss_Mu + loss_SD_img,loss_Mu+loss_SD_img,
@@ -582,20 +583,13 @@ for i in range(28):
             loss_array_view_tmp = []
             loss_array_img_tmp = []
 
-            for l in range(2):
-                loss_array_view = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
-                    loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
-                    loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
-                loss_array_img = np.array([loss_Mu + loss_SD_img+1,loss_Mu+loss_SD_img-1,
-                    loss_Mu + loss_SD_img,loss_Mu-loss_SD_img-1,
-                    loss_Mu - loss_SD_img+1,loss_Mu-loss_SD_img])
             loss_array_view = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
                 loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
                 loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
             loss_array_img = np.array([loss_Mu + loss_SD_img+1,loss_Mu+loss_SD_img-1,
                 loss_Mu + loss_SD_img,loss_Mu-loss_SD_img-1,
                 loss_Mu - loss_SD_img-1,loss_Mu-loss_SD_img])
-            for i in range(2):
+            for l in range(2):
 
                 randomize_view = np.arange(len(loss_array_view))
                 randomize_img = np.arange(len(loss_array_img))
@@ -745,13 +739,13 @@ for i in range(28):
                             		alignText = "center",languageStyle='RTL')
                 # draw the text onto the window
                     if outcome[j]==0:
-                        outcome_circle = visual.Circle(win = win0, lineColor = "green",edges = 180,
+                        outcome_circle = visual.Circle(win = win0, lineColor = "green",edges = 360,
                                                         lineWidth = 30,
                                                         radius = 220,units = "pix",opacity = .8,
                                                         pos = (-270,0))
                         outcome_circle.draw()
                     else:
-                        outcome_circle = visual.Circle(win = win0, lineColor = "green",edges = 180,
+                        outcome_circle = visual.Circle(win = win0, lineColor = "green",edges = 360,
                                                         lineWidth = 30,
                                                         radius = 220,units = "pix",opacity = .8,
                                                         pos = (270,0))
