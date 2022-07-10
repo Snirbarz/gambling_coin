@@ -77,7 +77,7 @@ Stimuli: all presented at 80cm away from the screen
 # import some help
 import os
 # Clear the command output
-from psychopy import logging, visual, core, event, clock, gui, parallel
+from psychopy import logging, visual, core, event, clock, gui, parallel, constants
 from datetime  import datetime
 import numpy as np
 import pandas as pd
@@ -176,7 +176,7 @@ stim_generate = np.array(stim_generate).flatten()
 cur_time_array = np.array(cur_time_array).flatten()
 
 # create gamble array
-logging.console.setLevel(logging.DEBUG) # log warning messages
+logging.console.setLevel(logging.WARNING) # log warning messages
 print("*************************************")
 print("PSYCHOPY LOGGING set to : WARNING")
 print(datetime.now())
@@ -195,18 +195,32 @@ win0 = visual.Window(size = (1280,1024),
                      )
 
 # For some reason the experiment works better if we play a video in the beginning thus we display the empty coin.
-flip = visual.VlcMovieStim(win = win0,
-         	    filename = "data/coin000000.avi",
-                units = "pix",
-                pos = (0,0),
-                autoStart=True)
-flip.draw()
-win0.flip()
-while  not flip.isFinished:
-     flip.draw()
-     win0.flip()
-flip._closeMedia()
-
+# flip = visual.VlcMovieStim(win = win0,
+#          	    filename = "data/coin000000.avi",
+#                 units = "pix",
+#                 pos = (0,0),
+#                 autoStart=True)
+# flip.draw()
+# win0.flip()
+# while  not flip.isFinished:
+#      flip.draw()
+#      win0.flip()
+# flip.stop()
+# flip._closeMedia()
+mov = visual.MovieStim2(
+    win0,
+    'coin000000.mp4',    # path to video file
+    flipVert=False,
+    flipHoriz=False,
+    loop=False,
+    noAudio=True)
+while mov.status != constants.FINISHED:
+    # draw the movie
+    mov.draw()
+    # flip buffers so they appear on the window
+    win0.flip()
+# stop the movie, this frees resources too
+mov.stop()
 # create our fixation cross
 def save_results(save_file_name):
     # create a data frame:
@@ -304,11 +318,12 @@ def flip_stim(image_type_1,image_type_2,side):
         outcome_image = image_stim_name[image_type_1]
     else:  # is it the right image
         outcome_image = image_stim_name[image_type_2]
-    coin_flip = visual.VlcMovieStim(win = win0,
+    coin_flip = visual.MovieStim2(win = win0,
                                        filename = "data/coin"+image_stim_name[image_type_1]+image_stim_name[image_type_2]+outcome_image+".avi",
                                        units = "pix",
                                        pos = (0,0),
-                                       autoStart=True)
+                                       loop=False,
+                                       noAudio=True)
     return coin_flip
 # create the outcome text for the learning trials.
 def outcome_stim_learn(loss,side):
@@ -465,22 +480,25 @@ for i in range(28):
             if i>=4 and i<10:
                 task = test_task[0] # first 6 trials in the test trials
             elif  i>=10 and i<16:
-                wait_scr() # wait 30 seconds
-                win0.flip()
-                core.wait(30)
-                win0.flip()
+                if i==10:
+                    wait_scr()
+                    win0.flip()
+                    core.wait(30)
+                    win0.flip()
                 task = test_task[1]
             elif  i>=16 and i<22:
-                wait_scr()
-                win0.flip()
-                core.wait(30)
-                win0.flip()
+                if i==16:
+                    wait_scr()
+                    win0.flip()
+                    core.wait(30)
+                    win0.flip()
                 task = test_task[2]
             elif  i>=22 and i<28:
-                wait_scr()
-                win0.flip()
-                core.wait(30)
-                win0.flip()
+                if i==22:
+                    wait_scr()
+                    win0.flip()
+                    core.wait(30)
+                    win0.flip()
                 task = test_task[3]
         outcome = np.array([0,0,0,0,0,0,1,1,1,1,1,1])# is the outcome left or right (0 or 1)
         loss_Mu  = Mu[stim_generate[i]] # what is the mu for the current trial i
@@ -669,13 +687,21 @@ for i in range(28):
                 time_stim = np.random.randint(250,400)/1000
                 core.wait(time_stim)
                 coin_flip = flip_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]],outcome[j])
-                coin_flip.draw()
-                win0.flip()
-                parallel.setData(5) # view trial
-                while  not coin_flip.isFinished:
+                while coin_flip.status != constants.FINISHED:
+                    # draw the movie
                     coin_flip.draw()
+                    # flip buffers so they appear on the window
                     win0.flip()
-                coin_flip._closeMedia()
+                # stop the movie, this frees resources too
+                coin_flip.stop()
+                # coin_flip.draw()
+                # win0.flip()
+                parallel.setData(5) # view trial
+                # while  not coin_flip.isFinished:
+                #     coin_flip.draw()
+                #     win0.flip()
+                # coin_flip.stop()
+                # coin_flip._closeMedia()
                 parallel.setData(0)
                 final_task_comb_array.append("view")
             if "img" in task:
@@ -707,6 +733,7 @@ for i in range(28):
                 parallel.setData(4) # view trial
                 start_time = clock.getTime()
                 key = event.waitKeys(maxWait = 9999,keyList = ["space"],clearEvents = True)
+
                 if 'space' in key:
                     sub_response_array.append(6666)
                     stop_time = clock.getTime()
@@ -714,20 +741,29 @@ for i in range(28):
                     pass
                 win0.flip()
                 parallel.setData(0)
-                coin_flip = visual.VlcMovieStim(win = win0,
+                coin_flip = visual.MovieStim2(win = win0,
                                                    filename = "data/coin000000.avi",
                                                    units = "pix",
-                                                   pos = (0,0),
-                                                   autoStart=True)
-                coin_flip.draw()
-                win0.flip()
-                parallel.setData(5) #show video
-                while  not coin_flip.isFinished:
+                                                   loop=False,
+                                                   noAudio=True,
+                                                   pos = (0,0))
+                while coin_flip.status != constants.FINISHED:
+                    # draw the movie
                     coin_flip.draw()
+                    # flip buffers so they appear on the window
                     win0.flip()
+                # stop the movie, this frees resources too
+                coin_flip.stop()
+                # coin_flip.draw()
+                # win0.flip()
+                parallel.setData(5) #show video
+                # while  not coin_flip.isFinished:
+                #     coin_flip.draw()
+                #     win0.flip()
                 parallel.setData(0)
                 final_task_comb_array.append("img")
-                coin_flip._closeMedia()
+                # coin_flip.stop()
+                # coin_flip._closeMedia()
 
             if "comb" in task:
                 if test_task_comb[j] =="img":
@@ -768,6 +804,7 @@ for i in range(28):
                     parallel.setData(4)
                 start_time = clock.getTime()
                 key = event.waitKeys(maxWait = 9999,keyList = ["space"],clearEvents = True)
+
                 if 'space' in key:
                     sub_response_array.append(6666)
                     stop_time = clock.getTime()
@@ -778,20 +815,27 @@ for i in range(28):
                 if test_task_comb[j] == "view":
                     coin_flip = flip_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]],outcome[j])
                 else:
-                    coin_flip = visual.VlcMovieStim(win = win0,
+                    coin_flip = visual.MovieStim2(win = win0,
                                                        filename = "data/coin000000.avi",
                                                        units = "pix",
-                                                       pos = (0,0),
-                                                       autoStart=True)
-                coin_flip.draw()
-                win0.flip()
-                parallel.setData(5)
-                while  not coin_flip.isFinished:
+                                                       loop=False,
+                                                       noAudio=True,
+                                                       pos = (0,0))
+                while coin_flip.status != constants.FINISHED:
+                    # draw the movie
                     coin_flip.draw()
+                    # flip buffers so they appear on the window
                     win0.flip()
+                # coin_flip.draw()
+                # win0.flip()
+                parallel.setData(5)
+                # while  not coin_flip.isFinished:
+                #     coin_flip.draw()
+                #     win0.flip()
                 parallel.setData(0)
                 final_task_comb_array.append(test_task_comb[j])
-                coin_flip._closeMedia()
+                # coin_flip.stop()
+                # coin_flip._closeMedia()
             final_gamble_array.append("no")
             loss = loss_array[j]
             if outcome[j]==coin_heads[i]:
@@ -926,8 +970,7 @@ for i in range(28):
                 start_time = clock.getTime()
                 core.wait(0.05)
                 parallel.setData(0)
-                key = event.waitKeys(clearEvents = True,keyList = ['q','d','k'],
-                                         maxWait = 9999)
+                key = event.waitKeys(clearEvents = True,keyList = ['q','d','k'],maxWait = 9999)
                 if key is None:
                     print('did not press at all')
                     sub_response_array.append(999)
