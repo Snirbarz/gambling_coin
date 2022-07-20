@@ -308,7 +308,7 @@ parallel.setData(0)
 for b in range(1):
 
     # update the subject on what to do:
-    line_1 = "\nלחץ/י D אם התמונה תואמת לתמונה המקדימה אותה\n"
+    line_1 = "\nלחץ/י D אם התמונה תואמת למילה המקדימה אותה\n"
     line_2 = "אחרת לחץ/י K"
     text_info = visual.TextStim(win0,text=line_1 + line_2,
                                  pos=(0,0),color = (-1,-1,-1),

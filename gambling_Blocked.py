@@ -120,7 +120,7 @@ cur_time = datetime.now().strftime('%H%M%S')
 
 # create variables
 no_trials = 28 # number of total trials (equal to number of unique coins)
-Mu = np.array([-6,-6,-10,-10,-6,-6,-6,-6,-8,-8,-8,-8,-10,-10,-10,-10,-6,-6,-6,-6,-8,-8,-8,-8,-10,-10,-10,-10]) # the mean of the coin which is the same for both imagination and view trials.
+Mu = np.array([-6,-6,-10,-10,-6,-6,-6,-6,-6,-6,-10,-10,-10,-10,-10,-10,-6,-6,-6,-6,-6,-6,-10,-10,-10,-10,-10,-10]) # the mean of the coin which is the same for both imagination and view trials.
 SD = np.array(["LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL"]) # The distribution width of the imagined and real outcomes the first letter is for the imagination trials.
 use_imagery = np.array([1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1]) # after imagination trials should the participant use imagery (1) or not (0) in his decisions
 training_task = np.array(["view","img","comb","comb"])# task in the training block
@@ -247,6 +247,7 @@ def save_results(save_file_name):
                                 'conf_mu':final_estimation_confidence_mu,
                                 'conf_range':final_estimation_confidence_range,
                                 'current_task':final_task_comb_array,
+                                'use_imagery':final_use_imagery,
                                 'sure_option':final_sure_option})
     # save the file
     output_file.to_csv(save_file_name,sep = ",",index=False)
@@ -344,7 +345,7 @@ def outcome_stim_gamble(Mu_loss,loss_array,Gamble_type):
         outcome =np.random.permutation(loss_array)[0]
 
     if Gamble_type == 0:
-        outcome = Mu_loss/2
+        outcome = Mu_loss
     return outcome # this is the gambling trial
 # estimate Mu
 def Value_slider_mu():
@@ -357,7 +358,7 @@ def Value_slider_mu():
                         style=('rating'))
     VAS.marker.color="green"
     VAS.marker.size =30
-    text = visual.TextStim(win = win0,text = "בחר/י את ההפסד הממוצע של התוצאות האמיתיות של המטבע בשלב הלמידה. \n בסיום לחצו SPACE",
+    text = visual.TextStim(win = win0,text = "בחר/י את ההפסד הממוצע של התוצאות האמיתיות (לא בדמיון) של המטבע בשלב הלמידה. \n בסיום לחצו SPACE",
                            pos=(0,300),color = (1,1,1),
                            units = "pix", height = 32,wrapWidth = 1200,
                            alignText = "center",languageStyle='RTL'
@@ -385,7 +386,7 @@ def Value_slider_range():
         VAS_high.marker.color="blue"
         VAS_low.marker.size =30
         VAS_high.marker.size =30
-        line_1 = "\n בחר/י את ההפסד הגבוה והנמוך ביותר של התוצאות האמיתיות בשלב הקודם \n"
+        line_1 = "\n בחר/י את ההפסד הגבוה והנמוך ביותר של התוצאות האמיתיות (לא בדמיון) בשלב הקודם \n"
         line_2 = "\n כשאת/ה מסיים/ת לחצ/י SPACE \n"
         text = visual.TextStim(win = win0,text = line_1+line_2,
                                pos=(0,300),color = (1,1,1),
@@ -415,7 +416,7 @@ def Value_slider_confidence():
                           )
     VAS = visual.Slider(win =win0,
                         ticks = range(20), # values are from 0 to 20, but they need to be multiplied by 5
-                        labels = ["0- אל חוטב ללכ","50 - חוטב הדימב תינוניב","100 - חוטב דואמ "],
+                        labels = ["0- אל ללכב","50 - הדימב תינוניב","100 - דואמ "],
                         granularity =.1,
                         units = "pix",
                         size = [1000,50],
@@ -525,7 +526,7 @@ for i in range(28):
                 outcome = np.array([1,1,1,1,1,1,0,0,0,0,0,0])
             outcome = outcome[randomize]
             loss_array = loss_array[randomize]
-            line_1 = "\n בבקשה שימ/י לב לתוצאות של הטלת המטבע \n"
+            line_1 = "\n בבקשה שימ/י לב לתוצאות האמתיות של הטלת המטבע \n"
             line_2 = "\n לחץ/י ENTER להמשיך \n"
             text_info_start = visual.TextStim(win0,text=line_1+line_2,
                                 pos=(0,0),color = (1,1,1),
@@ -863,7 +864,7 @@ for i in range(28):
             final_use_imagery.append("NA")
             final_sure_option.append("NA")
         # gambling part:
-        if use_imagery[i]==0 and "comb" in task:
+        if use_imagery[stim_generate[i]]==0 and "comb" in task:
             line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
             line_2 = "\nאבל, התוצאות שהתקבלו בדמיון, אינם רלבנטיות להחלטה שלך\n"
             line_3 = "\nלחץ/י ENTER להמשיך\n"
@@ -872,7 +873,7 @@ for i in range(28):
                              		units = "pix", height = 32,wrapWidth=1500,
                              		alignText = "center",languageStyle='RTL')
             pin = 12
-        elif use_imagery[i]==1 and "comb" in task:
+        elif use_imagery[stim_generate[i]]==1 and "comb" in task:
             line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
             line_2 = "\nהתוצאות שהתקבלו בדמיון רלבנטיות במידה דומה לשאר התוצאות בהחלטה שלך\n"
             line_3 = "\nלחץ/י ENTER להמשיך\n"
@@ -901,7 +902,7 @@ for i in range(28):
         win0.flip()
         parallel.setData(0)
         line_1 ="\nלחץ/י D אם את/ה רוצה להמר על תוצאות המטבע\n"
-        line_2 = "\nאחרת, לחצ/י K אם את/ה מעדיפ/ה לקבל חצי מההפסד למטה\n"
+        line_2 = "\nאחרת, לחצ/י K אם את/ה מעדיפ/ה לקבל את הההפסד למטה\n"
         line_3 = "\nלחץ/י ENTER להמשיך\n"
         text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
                              pos=(0,0),color = (1,1,1),
@@ -953,7 +954,7 @@ for i in range(28):
                                              pos=(200,-20),color = (1,1,1),
                                              units = "pix", height = 32,wrapWidth=1500,
                                              alignText = "center")
-                text_half = visual.TextStim(win0,text="חצי",
+                text_half = visual.TextStim(win0,text="הפסד בטוח",
                                              pos=(200,20),color = (1,1,1),
                                              units = "pix", height = 32,wrapWidth=1500,
                                              alignText = "center",languageStyle="RTL")
@@ -996,10 +997,10 @@ for i in range(28):
                         response_latency.append(round(stop_time-start_time,4)*1000)
                         break_flag = 1
                         break
-                final_use_imagery.append(use_imagery[i])
-                if gamble==1 and use_imagery[i]==0:
+                final_use_imagery.append(use_imagery[stim_generate[i]])
+                if gamble==1 and use_imagery[stim_generate[i]]==0:
                     loss = outcome_stim_gamble(sure_options[s],loss_array_view,1)
-                elif gamble==1 and use_imagery[i]==1:
+                elif gamble==1 and use_imagery[stim_generate[i]]==1:
                     loss = outcome_stim_gamble(sure_options[s],loss_array,1)
                 elif gamble==0:
                     loss = outcome_stim_gamble(sure_options[s],loss_array,0)
@@ -1013,7 +1014,6 @@ for i in range(28):
                 final_estimation_range_high.append("NA")
                 final_estimation_confidence_mu.append("NA")
                 final_estimation_confidence_range.append("NA")
-                final_use_imagery.append("NA")
         Value_Mu, text_mu = Value_slider_mu()
         continueRoutine = True
         parallel.setData(15)
