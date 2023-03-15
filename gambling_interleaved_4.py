@@ -84,56 +84,75 @@ import pandas as pd
 from psychopy.constants import (NOT_STARTED, STARTED, PLAYING, PAUSED,
                                 STOPPED, FINISHED, PRESSED, RELEASED, FOREVER)
 import pathlib
-# set parallel port address
 
+# set parallel port address
 parallel.setPortAddress()
 
-parallel.setData(0) # reset bits
-date_val = datetime.now().strftime("%Y-%m-%d") # obtain the current date
+# reset bits
+parallel.setData(0) 
 
-# we want to setup our experiment: sub_id, sub_gender, sub_age
-# create list of file save
+# obtain the current date
+date_val = datetime.now().strftime("%Y-%m-%d") 
+
+# create a dialog box to collect subject information
 my_Dlg = gui.Dlg(title = "gambling task")
 my_Dlg.addText("Subject info")
 my_Dlg.addField("Exp Date",date_val)
 my_Dlg.addField("ID","")
 
-#obtain the ID from the user
+# show the dialog box and collect the user's ID
 show_dlg = my_Dlg.show()
+
+# if the user clicks OK, create a save file name using the current date and the user's ID
 if my_Dlg.OK:
     print(show_dlg)
-    # set up our save file date_sub_id_linetask.csv
     save_file_name = show_dlg[0]+"_"+show_dlg[1]+'_gambling_task.csv'
     print(save_file_name)
+# if the user clicks Cancel, print a message
 else:
     print("user cancelled")
+
+# print the experiment setup information
 print("Experiment setup information")
 print(show_dlg)
-# create a save file save_path
+
+# create a save path for the data file
 save_path = gui.fileSaveDlg(initFileName=save_file_name,
                             prompt = 'select Save File',
                             )
 
+# print the output from the save dialog
 print("Output from save dialog")
 print(save_path)
+
+# print that the setup is finished
 print("finished")
-cur_time = datetime.now().strftime('%H%M%S')
+
+# obtain the current time
+cur_time = datetime.now().strftime('%H%M%S') 
 
 # create variables
-no_trials = 28 # number of total trials (equal to number of unique coins)
-Mu = np.array([-6,-6,-10,-10,-6,-6,-6,-6,-6,-6,-10,-10,-10,-10,-10,-10,-6,-6,-6,-6,-6,-6,-10,-10,-10,-10,-10,-10]) # the mean of the coin which is the same for both imagination and view trials.
-SD = np.array(["LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL","LH","HL"]) # The distribution width of the imagined and real outcomes the first letter is for the imagination trials.
-use_imagery = np.array([1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1]) # after imagination trials should the participant use imagery (1) or not (0) in his decisions
-training_task = np.array(["view","img","comb","comb"])# task in the training block
-test_task = np.random.permutation(np.array(["comb_1","comb_2","comb_3","comb_4"]))# task in the test blocks
-coin_array = np.array(range(no_trials))# number of coins (28)
-coin_side_1 = np.array([0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,4,4,4,5,5,6]) # side 1 index of the coin
-coin_side_2 = np.array([1,2,3,4,5,6,7,2,3,4,5,6,7,3,4,5,6,7,4,5,6,7,5,6,7,6,7,7]) # side 2 index of the coin
-coin_heads = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1]) # coin heads (1) or tails (0)
+no_trials = 4 # number of total trials (equal to number of unique coins)
+Mu = np.array([-10,-10,-10,-10]) # the mean of the coin which is the same for both imagination and view trials.
+SD = np.array(["LH","HL","MH","MM"]) # The distribution width of the imagined and real outcomes the first letter is for the imagination trials.
+test_task = np.random.permutation(np.array(["comb_1"]))# task in the test blocks
+coin_array = np.array(range(no_trials))# number of coins (4)
+coin_sides = np.array([0,1,2,3,4,5,6,7])
+coin_sides = np.random.permutation(coin_sides)
+
+coin_side_1 = np.array(coin_sides[0:4]) # side 1 index of the coin
+coin_side_2 = np.array(coin_sides[4:8])  # side 2 index of the coin
+for i in range(no_trials):
+    if coin_side_1[i] > coin_side_2[i]:
+        tmp_side_1 = coin_side_1[i]
+        coin_side_1[i] = coin_side_2[i]
+        coin_side_2[i] = tmp_side_1
+
+coin_heads = np.array([0,0,1,1]) # coin heads (1) or tails (0)
 np.random.permutation(coin_heads) # permute which side is heads or tails
 
 cur_time_array = []
-trial_no = [] # current trial number (0-27)
+trial_no = [] # current coin number (0-4)
 sub_id_array = [] # subject id
 date_value_array=[] # current date
 sub_response_array=[] # subject reponse "Gamble or loss" also space for learning trials.
@@ -169,11 +188,12 @@ new_generate_array = np.random.permutation(coin_array[4:28]) # the combination o
 new_generate_array=np.concatenate((range(4),new_generate_array),axis = None) # create array separating the first 4 training trials from the last 24 trials
 for n in range(no_trials):
     stim_coin.append(new_coin_array[n])
-    stim_generate.append(new_generate_array[n])
+    stim_generate.append(new_coin_array[n])
     cur_time_array.append(datetime.now().strftime('%H%M%S'))
 stim_coin = np.array(stim_coin).flatten()
 print(stim_coin)
 stim_generate = np.array(stim_generate).flatten()
+print(stim_generate)
 cur_time_array = np.array(cur_time_array).flatten()
 
 # create gamble array
@@ -274,7 +294,7 @@ def fixation_cross():
     fix_cross_horiz.draw() # this will draw the horizontal bit onto the window
     fix_cross_vert.draw() # this will draw the vertical bit onto the window
 # create our coin stim which displays two sides of the coin to the participant before the trial starts.
-def image_stim(image_type_1,image_type_2):
+def image_stim(image_type_1,image_type_2,gamble=False):
     '''
     We are preparing our Stimulus
     image_type == 0, Stim01.png "frog"
@@ -290,12 +310,18 @@ def image_stim(image_type_1,image_type_2):
 
     image_right = visual.ImageStim(win = win0,
                                        image = "data/Circ" + image_stim_name[image_type_1] +".png",
-                                       units = "pix",
-                                       pos = (-270,0))
+                                       pos = (-300,125) if gamble  else (-270,0),units = "pix"
+                                       )
     image_left = visual.ImageStim(win = win0,
                                        image = "data/Circ" + image_stim_name[image_type_2] +".png",
-                                       units = "pix",
-                                       pos = (270,0))
+                                       pos = (-100,125) if gamble  else (270,0),units = "pix"
+                                       )
+    if gamble:
+        image_right.size= (125,125)
+        image_left.size= (125,125)
+    else:
+        image_right.size = (400,400)
+        image_left.size= (400,400)
     image_right.draw()# this will draw the right image onto the window
     image_left.draw()# this will draw the left image onto the window
 
@@ -350,7 +376,7 @@ def Value_slider_mu():
     VAS = visual.Slider(win =win0,
                         ticks = [-20,-19,-18,-17,-16,-15,-14,-13,-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,-0],
                         labels = [-20,-18,-16,-14,-12,-10,-8,-6,-4,-2,0],
-                        granularity =.1,
+                        granularity =.1,font = "Times New Roman",
                         units = "pix",
                         size = [1200,50],
                         style=('rating'))
@@ -370,7 +396,7 @@ def Value_slider_range():
                             granularity =.1,
                             units = "pix",
                             size = [1000,50],
-                            pos = [0,-300],
+                            pos = [0,-300],font = "Times New Roman",
                             style=('rating'))
         VAS_high = visual.Slider(win =win0,
                             ticks = [-20,-19,-18,-17,-16,-15,-14,-13,-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,-0],
@@ -378,7 +404,7 @@ def Value_slider_range():
                             granularity =.1,
                             units = "pix",
                             size = [1000,50],
-                            pos = [0,0],
+                            pos = [0,0],font = "Times New Roman",
                             style=('rating'))
         VAS_low.marker.color="blue"
         VAS_high.marker.color="blue"
@@ -403,7 +429,7 @@ def Value_slider_range():
                               )
 
         return VAS_low, VAS_high, text, text_low, text_high# rate the range trial
-# estimate confidenct
+# estimate confidence
 def Value_slider_confidence():
     line_1 = "\n כמה בטוח/ה את/ה בהערכות שלך מ-0 עד 100 \n"
     line_2 = "\n כשאת/ה מסיים/ת לחצ/י SPACE \n"
@@ -414,11 +440,11 @@ def Value_slider_confidence():
                           )
     VAS = visual.Slider(win =win0,
                         ticks = range(20), # values are from 0 to 20, but they need to be multiplied by 5
-                        labels = ["0- אל ללכב","50 - הדימב תינוניב","100 - דואמ "],
+                        labels = ["0-ללכב אל", "50-הדימב תינוניב","100-דואמ"],
                         granularity =.1,
                         units = "pix",
                         size = [1000,50],
-                        pos = [0,0],
+                        pos = [0,0],font = "Times New Roman",
                         style=('rating'),labelWrapWidth = 30,labelHeight=30)
     VAS.marker.color="red"
     VAS.marker.size =30
@@ -436,7 +462,6 @@ parallel.setData(9) #task start
 core.wait(0.1)
 parallel.setData(0)
 # Our main program loop
-break_flag=0
 text_info = visual.TextStim(win0,text="לחצ/י ENTER על מנת להתחיל",
                              pos=(0,0),color = (1,1,1),
                              units = "pix", height = 32,
@@ -468,312 +493,91 @@ if 'return' in key:
     pass
 win0.flip()
 parallel.setData(0)
-for i in range(28):
-        # if trial i is between 0 and 3 (included) then it is training blocks
-        # if trials i >=4 then it is test blcok
-        if i<4:
-            phase = "training"
-            task = training_task[i]
-        else:
-            phase = "test"
-            if i>=4 and i<10:
-                task = test_task[0] # first 6 trials in the test trials
-            elif  i>=10 and i<16:
-                if i==10:
-                    wait_scr()
-                    win0.flip()
-                    core.wait(30)
-                    win0.flip()
-                task = test_task[1]
-            elif  i>=16 and i<22:
-                if i==16:
-                    wait_scr()
-                    win0.flip()
-                    core.wait(30)
-                    win0.flip()
-                task = test_task[2]
-            elif  i>=22 and i<28:
-                if i==22:
-                    wait_scr()
-                    win0.flip()
-                    core.wait(30)
-                    win0.flip()
-                task = test_task[3]
-        outcome = np.array([0,0,0,0,0,0,1,1,1,1,1,1])# is the outcome left or right (0 or 1)
-        loss_Mu  = Mu[stim_generate[i]] # what is the mu for the current trial i
-        if SD[stim_generate[i]] == "LH":
-            loss_SD_img = 1 # low range
-            loss_SD_view = 4
-        elif SD[stim_generate[i]] == "HL":
-            loss_SD_img = 4
-            loss_SD_view = 1
-        # create loss array for view trials, imagination trials, and combined imagination and view trials.
-        loss_array = np.array([0,0,0,0,0,0,0,0,0,0,0,0])
-        if i ==0: #view trial training
-            loss_array = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view+1,
+
+
+def create_trials(low,high):
+    break_flag=0
+    # create trials for learning: 
+    loss_array = np.array([])
+    outcome = np.array([])
+    current_coin = np.array([])
+    task_array = np.array([])
+    for coin in range(low,high):
+            # what is the mu for the current trial i
+            loss_Mu  = Mu[stim_generate[coin]] 
+            if SD[stim_generate[coin]] == "LH":
+                # set loss_SD_img and loss_SD_view based on value of SD
+                loss_SD_img = 1 
+                loss_SD_view = 6
+            elif SD[stim_generate[coin]] == "HL":
+                loss_SD_img = 6
+                loss_SD_view = 1
+            elif SD[stim_generate[coin]] == "MH":
+                loss_SD_img = 3
+                loss_SD_view = 6
+            elif SD[stim_generate[coin]] == "MM":
+                loss_SD_img = 3
+                loss_SD_view = 3
+            # create loss array for view trials, imagination trials, and combined imagination and view trials.
+            loss_array_tmp = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view+1,
                 loss_Mu+loss_SD_view-1,loss_Mu+loss_SD_view-1,
                 loss_Mu+loss_SD_view,loss_Mu+loss_SD_view,
                 loss_Mu - loss_SD_view+1,loss_Mu-loss_SD_view+1,
                 loss_Mu - loss_SD_view-1,loss_Mu-loss_SD_view-1,
-                loss_Mu - loss_SD_view,loss_Mu-loss_SD_view])
-            randomize = np.arange(len(outcome))
-            np.random.shuffle(randomize)
-            if coin_heads[i]==1:# if coin heads is 1 then higher than avg loss is received whenever the right image is drawn as outcome
-                outcome = np.array([0,0,0,0,0,0,1,1,1,1,1,1])
-            else:
-                outcome = np.array([1,1,1,1,1,1,0,0,0,0,0,0])
-            outcome = outcome[randomize]
-            loss_array = loss_array[randomize]
-            line_1 = "\n בבקשה שימ/י לב לתוצאות האמתיות של הטלת המטבע \n"
-            line_2 = "\n לחץ/י ENTER להמשיך \n"
-            text_info_start = visual.TextStim(win0,text=line_1+line_2,
-                                pos=(0,0),color = (1,1,1),
-                                units = "pix", height = 32,wrapWidth=1500,
-                                alignText = "center",languageStyle='RTL')
-            text_info_start.draw()
-            win0.flip()
-            parallel.setData(10) # instructions learning
-            key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
-            if 'return' in key:
-                pass
-            win0.flip()
-            parallel.setData(0)
-        if i ==1: # imagination trial training
-            loss_array = np.array([loss_Mu + loss_SD_img+1,loss_Mu+loss_SD_img+1,
-                loss_Mu + loss_SD_img-1,loss_Mu+loss_SD_img-1,
-                loss_Mu + loss_SD_img,loss_Mu+loss_SD_img,
+                loss_Mu - loss_SD_view,loss_Mu-loss_SD_view,
+                loss_Mu+loss_SD_img+1,loss_Mu+loss_SD_img+1,
+                loss_Mu+loss_SD_img-1,loss_Mu+loss_SD_img-1,
+                loss_Mu+loss_SD_img,loss_Mu+loss_SD_img,
                 loss_Mu - loss_SD_img+1,loss_Mu-loss_SD_img+1,
                 loss_Mu - loss_SD_img-1,loss_Mu-loss_SD_img-1,
-                loss_Mu - loss_SD_img,loss_Mu-loss_SD_img]) # 2 examples of each type of loss
-            randomize = np.arange(len(outcome))
+                loss_Mu - loss_SD_img,loss_Mu-loss_SD_img])     
+            # shuffle loss_array_tmp using randomize array
+            randomize = np.arange(len(loss_array_tmp))
             np.random.shuffle(randomize)
-            if coin_heads[i]==1:
-                outcome = np.array([0,0,0,0,0,0,1,1,1,1,1,1])
+            # flip values in outcome_tmp if coin_heads is 0
+            task_array_tmp = np.array(["view","view","view","view","view","view","view","view","view","view","view","view",
+                "img","img","img","img","img","img","img","img","img","img","img","img"])
+            if coin_heads[coin]==1:
+                # if coin heads is 1 then higher than avg loss is received whenever the right image is drawn as outcome
+                outcome_tmp = np.array([0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1])
             else:
-                outcome = np.array([1,1,1,1,1,1,0,0,0,0,0,0])
-            outcome = outcome[randomize]
-            loss_array = loss_array[randomize]
-            line_1 ="\nעכשיו המטלה תשתנה\n"
-            line_2 = "\nבמקום לצפות בתוצאות ההטלה של המטבע\n"
-            line_3 = "\nאתה תצטרך/י לדמיין בראשך כאילו למטבע יש תוצאה מסוימת\n"
-            line_4 = "\nהתוצאה המסוימת תהיה מודגשת בירוק\n"
-            line_5 = "\nלחץ/י ENTER להמשיך\n"
-            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3+line_4+line_5,
-                pos=(0,0),color = (1,1,1),
-                units = "pix", height = 32,wrapWidth=1500,
-                alignText = "center",languageStyle='RTL')
-
-            text_info_start.draw()
-            win0.flip()
-            parallel.setData(10) # instructions learning
-            key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
-            if 'return' in key:
-                pass
-            win0.flip()
+                outcome_tmp = np.array([1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0])
+            # shuffle outcome_tmp using randomize array
+            outcome_tmp = outcome_tmp[randomize]
+            loss_array_tmp = loss_array_tmp[randomize]
+            task_array_tmp = task_array_tmp[randomize]
+            # update loss_array, outcome, and current_coin with current coin's trials
+            loss_array = np.append(loss_array,loss_array_tmp)
+            outcome = np.append(outcome,outcome_tmp)
+            current_coin = np.append(current_coin,np.repeat(stim_generate[coin],24))
+            task_array = np.append(task_array,task_array_tmp)
+    # shuffle all trials together using randomize array
+    randomize =  np.arange(len(loss_array))       
+    np.random.shuffle(randomize)
+    loss_array = loss_array[randomize]
+    outcome = outcome[randomize]
+    current_coin = current_coin[randomize]
+    task_array = task_array[randomize]
+    print("current_coin",current_coin)
+    print("task_array",task_array)
+    print("loss_array",loss_array)
+    print("outcome",outcome)
+    for trial in range(48):
+            phase = "training"
+            task = "comb"
             parallel.setData(0)
-        if i ==2: # first training trial with combined instructions
-            line_1 ="\nעכשיו, המטלה תכלול גם צעדי צפייה וצעדי דמיון\n"
-            line_2 = "\nבכל פעם יודגש בפניך אם צריך רק לצפות או רק ולדמיין\n"
-            line_3 = "\nלחץ/י ENTER להמשיך\n"
-            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
-				     		        pos=(0,0),color = (1,1,1),
-                             		units = "pix", height = 32,wrapWidth=1500,
-                             		alignText = "center",languageStyle='RTL')
-
-            text_info_start.draw()
-            win0.flip()
-            parallel.setData(10) # instructions learning
-            key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
-            if 'return' in key:
-                pass
-            win0.flip()
-            parallel.setData(0)
-        # create imagination and view trial such that no more than 2 trials in a row are img or view
-        test_task_comb = np.repeat("view",12)
-        test_task_comb= np.array([test_task_comb,np.repeat("img",12)]).flatten()
-        conditionsList = np.repeat("view",12)
-        conditionsList= np.array([conditionsList,np.repeat("img",12)]).flatten()
-        # create loss for imagination and view trials separately.
-        if "comb" in task:
-            outcome_view_tmp = []
-            outcome_img_tmp = []
-            loss_array_view_tmp = []
-            loss_array_img_tmp = []
-
-            loss_array_view = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
-                loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
-                loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
-            loss_array_img = np.array([loss_Mu + loss_SD_img+1,loss_Mu+loss_SD_img-1,
-                loss_Mu + loss_SD_img,loss_Mu-loss_SD_img-1,
-                loss_Mu - loss_SD_img-1,loss_Mu-loss_SD_img])
-            for l in range(2):
-
-                randomize_view = np.arange(len(loss_array_view))
-                randomize_img = np.arange(len(loss_array_img))
-                np.random.shuffle(randomize_view)
-                np.random.shuffle(randomize_img)
-                if coin_heads[i]==1:
-                    outcome_view = np.array([0,0,0,1,1,1])
-                    outcome_img = np.array([0,0,0,1,1,1])
-                else:
-                    outcome_view = np.array([1,1,1,0,0,0])
-                    outcome_img = np.array([1,1,1,0,0,0])
-                outcome_view = outcome_view[randomize_view]
-                loss_array_view = loss_array_view[randomize_view]
-                outcome_img = outcome_img[randomize_img]
-                loss_array_img = loss_array_img[randomize_img]
-                outcome_view_tmp = [*outcome_view_tmp,*outcome_view]
-                outcome_img_tmp = [*outcome_img_tmp,*outcome_img]
-                loss_array_view_tmp = [*loss_array_view_tmp,*loss_array_view]
-                loss_array_img_tmp  = [*loss_array_img_tmp,*loss_array_img]
-            outcome = [*outcome_view_tmp,*outcome_img_tmp]
-            loss_array = [*loss_array_view_tmp,*loss_array_img_tmp]
-            print(outcome)
-            print(np.array(outcome).flatten())
-            print(loss_array)
-        for j in range(len(outcome)):
-            block_array.append(phase)
-            trial_no.append(i)
-            sub_id_array.append(sub_id)
-            date_value_array.append(date_val)
+            trial_no.append(f'trial_learning: {trial}')
             time_value_array.append(datetime.now().strftime("%H%M%S"))
-            final_coin_side_1_array.append(coin_side_1[stim_coin[i]])
-            final_coin_side_2_array.append(coin_side_2[stim_coin[i]])
-            final_Mu_array.append(Mu[stim_generate[i]])
-            final_SD_array.append(SD[stim_generate[i]])
-            final_head_array.append(coin_heads[i])
-            final_outcome_array.append(outcome[j])
-            final_task_array.append(task)
-            print("Current Trial is: %d" %(i))
-            print("Current heads is: %d" %(coin_side_1[i]))
-            print("Current outcome is: %d" %(outcome[j]))
-            print("Current loss is: %d" %(loss_array[j]))
-            print("Current condition is:" +test_task_comb[j])
-            # print("Current Text is: %d" %(text_array[i]))
-            fixation_cross()
-            # flip window onto the screen
-            win0.flip()
-            parallel.setData(2) # fixation
-            core.wait(0.2)
-            parallel.setData(0)
-            time_fixation = np.random.randint(500,1000)/1000
-            # wait 1 sec
-            core.wait(time_fixation-0.2)
-            win0.flip()
-            final_fix_time_array.append(time_fixation)
-
-            if "view" in task:
-                text_view = visual.TextStim(win0,text="על מנת לצפות בתוצאה האמיתית של המטבע, לחץ/י SPACE" ,
-                                             pos=(0,-300),color = (1,1,1),
-                                             units = "pix", height = 32,wrapWidth=1500,
-                                             alignText = "center",languageStyle='RTL')
-            # draw the text onto the window
-                text_view.draw()
-            # draw both coin sides onto the screen
-                image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
-            # flip window onto screen
-                win0.flip()
-                parallel.setData(3) # view trial
-                start_time = clock.getTime()
-                key = event.waitKeys(maxWait = 9999,keyList = ["space"],clearEvents = True)
-                if 'space' in key:
-                    sub_response_array.append(6666)
-                    stop_time = clock.getTime()
-                    response_latency.append(round(stop_time-start_time,4)*1000)
-                    pass
-                win0.flip()
-                parallel.setData(0)
-                time_stim = np.random.randint(250,400)/1000
-                core.wait(time_stim)
-                coin_flip = flip_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]],outcome[j])
-                while coin_flip.status != constants.FINISHED:
-                    # draw the movie
-                    coin_flip.draw()
-                    # flip buffers so they appear on the window
-                    win0.flip()
-                # stop the movie, this frees resources too
-                coin_flip.stop()
-                # coin_flip.draw()
-                # win0.flip()
-                parallel.setData(5) # view trial
-                # while  not coin_flip.isFinished:
-                #     coin_flip.draw()
-                #     win0.flip()
-                # coin_flip.stop()
-                # coin_flip._closeMedia()
-                parallel.setData(0)
-                final_task_comb_array.append("view")
-            if "img" in task:
-                line_1 ="\n בבקשה דמיין/י כאילו התוצאה המסומת בירוק היא התוצאה של ההטלה\n"
-                line_2 = "\nלחץ/י SPACE להמשיך\n"
-                text_info_start = visual.TextStim(win0,text=line_1+line_2,
-				     		        pos=(0,-300),color = (1,1,1),
-                            		units = "pix", height = 32,wrapWidth=1500,
-                            		alignText = "center",languageStyle='RTL')
-            # draw the text onto the window
-                text_info_start.draw()
-                if outcome[j]==0:
-                    outcome_circle = visual.Circle(win = win0, lineColor = "green",edges = 180,
-                                                    lineWidth = 30,
-                                                     radius = 220,units = "pix",opacity = .8,
-                                                    pos = (-270,0))
-                    outcome_circle.draw()
-                else:
-                    outcome_circle = visual.Circle(win = win0, lineColor = "green",edges = 180,
-                                                    lineWidth = 30,
-                                                     radius = 220,units = "pix",opacity = .8,
-                                                    pos = (270,0))
-                    outcome_circle.draw()
-
-            # draw both coin sides onto the screen
-                image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
-            # flip window onto screen
-                win0.flip()
-                parallel.setData(4) # view trial
-                start_time = clock.getTime()
-                key = event.waitKeys(maxWait = 9999,keyList = ["space"],clearEvents = True)
-
-                if 'space' in key:
-                    sub_response_array.append(6666)
-                    stop_time = clock.getTime()
-                    response_latency.append(round(stop_time-start_time,4)*1000)
-                    pass
-                win0.flip()
-                parallel.setData(0)
-                coin_flip = visual.MovieStim2(win = win0,
-                                                   filename = "data/coin000000.avi",
-                                                   units = "pix",
-                                                   loop=False,
-                                                   noAudio=True,
-                                                   pos = (0,0))
-                while coin_flip.status != constants.FINISHED:
-                    # draw the movie
-                    coin_flip.draw()
-                    # flip buffers so they appear on the window
-                    win0.flip()
-                # stop the movie, this frees resources too
-                coin_flip.stop()
-                # coin_flip.draw()
-                # win0.flip()
-                parallel.setData(5) #show video
-                # while  not coin_flip.isFinished:
-                #     coin_flip.draw()
-                #     win0.flip()
-                parallel.setData(0)
-                final_task_comb_array.append("img")
-                # coin_flip.stop()
-                # coin_flip._closeMedia()
-
             if "comb" in task:
-                if test_task_comb[j] =="img":
-                    line_1 ="\n בבקשה דמיין/י כאילו התוצאה המסומת בירוק היא התוצאה של ההטלה\n"
+                if task_array[trial]=="img": # now it only shows imagination trials
+                    line_1 ="\n בבקשה דמיין/י כאילו התוצאה המסומנת בירוק היא התוצאה של ההטלה\n"
                     line_2 = "\nלחץ/י SPACE להמשיך\n"
                     text_view = visual.TextStim(win0,text=line_1+line_2,
-				     		        pos=(0,-300),color = (1,1,1),
-                            		units = "pix", height = 32,wrapWidth=1500,
-                            		alignText = "center",languageStyle='RTL')
+                                    pos=(0,-300),color = (1,1,1),
+                                    units = "pix", height = 32,wrapWidth=1500,
+                                    alignText = "center",languageStyle='RTL')
                 # draw the text onto the window
-                    if outcome[j]==0:
+                    if outcome[trial]==0:
                         outcome_circle = visual.Circle(win = win0, lineColor = "green",edges = 360,
                                                         lineWidth = 30,
                                                         radius = 220,units = "pix",opacity = .8,
@@ -785,25 +589,25 @@ for i in range(28):
                                                         radius = 220,units = "pix",opacity = .8,
                                                         pos = (270,0))
                         outcome_circle.draw()
-                if test_task_comb[j] == "view":
+                if task_array[trial]=="view":
                     text_view = visual.TextStim(win0,text="על מנת לצפות בתוצאה האמיתית של המטבע, לחץ/י SPACE",
                                                 pos=(0,-300),color = (1,1,1),
                                                 units = "pix", height = 32,wrapWidth=1500,
                                                 alignText = "center",languageStyle='RTL')
 
-            # draw the text onto the window
+                # draw the text onto the window
                 text_view.draw()
-            # draw both coin sides onto the screen
-                image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
-            # flip window onto screen
+                # draw both coin sides onto the screen
+                image_stim(coin_side_1[current_coin[trial].astype(int)],coin_side_2[current_coin[trial].astype(int)])
+                # flip window onto screen
                 win0.flip()
-                if test_task_comb[j] =="img":
+                if task_array[trial]=="img":
                     parallel.setData(3)
                 else:
                     parallel.setData(4)
                 start_time = clock.getTime()
                 key = event.waitKeys(maxWait = 9999,keyList = ["space"],clearEvents = True)
-
+                parallel.setData(0)
                 if 'space' in key:
                     sub_response_array.append(6666)
                     stop_time = clock.getTime()
@@ -811,8 +615,9 @@ for i in range(28):
                     pass
                 parallel.setData(0)
                 core.wait(.2)
-                if test_task_comb[j] == "view":
-                    coin_flip = flip_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]],outcome[j])
+                # if test_task_comb[trial] == "view":
+                if task_array[trial]=="view":
+                    coin_flip = flip_stim(coin_side_1[current_coin[trial].astype(int)],coin_side_2[current_coin[trial].astype(int)],outcome[trial])
                 else:
                     coin_flip = visual.MovieStim2(win = win0,
                                                        filename = "data/coin000000.avi",
@@ -832,72 +637,49 @@ for i in range(28):
                 #     coin_flip.draw()
                 #     win0.flip()
                 parallel.setData(0)
-                final_task_comb_array.append(test_task_comb[j])
+                final_task_comb_array.append(task_array[trial])
                 # coin_flip.stop()
                 # coin_flip._closeMedia()
-            final_gamble_array.append("no")
-            loss = loss_array[j]
-            if outcome[j]==coin_heads[i]:
-                outcome_stim_l, loss = outcome_stim_learn(loss,1)
-            else:
-                outcome_stim_l, loss = outcome_stim_learn(loss,0)
-            outcome_stim_l.draw()
-            final_loss_array.append(loss)
-            win0.flip()
-            parallel.setData(6) # show outcome learning
-            core.wait(1.5)
-            parallel.setData(0)
-            # clear the Screen
-            fixation_cross()
-            win0.flip()
-            parallel.setData(2)
-            core.wait(.1)
-            parallel.setData(0)
-            core.wait(.1)
-            final_estimation_mu.append("NA")
-            final_estimation_rangelow.append("NA")
-            final_estimation_range_high.append("NA")
-            final_estimation_confidence_mu.append("NA")
-            final_estimation_confidence_range.append("NA")
-            final_use_imagery.append("NA")
-            final_sure_option.append("NA")
-        # gambling part:
-        if use_imagery[stim_generate[i]]==0 and "comb" in task:
-            line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
-            line_2 = "\nאבל, התוצאות שהתקבלו בדמיון, אינם רלבנטיות להחלטה שלך\n"
-            line_3 = "\nלחץ/י ENTER להמשיך\n"
-            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
-				     		        pos=(0,0),color = (1,1,1),
-                             		units = "pix", height = 32,wrapWidth=1500,
-                             		alignText = "center",languageStyle='RTL')
-            pin = 12
-        elif use_imagery[stim_generate[i]]==1 and "comb" in task:
-            line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
-            line_2 = "\nהתוצאות שהתקבלו בדמיון רלבנטיות במידה דומה לשאר התוצאות בהחלטה שלך\n"
-            line_3 = "\nלחץ/י ENTER להמשיך\n"
-            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
-				     		        pos=(0,0),color = (1,1,1),
-                             		units = "pix", height = 32,wrapWidth=1500,
-                             		alignText = "center",languageStyle='RTL')
-            pin = 11
-        elif "comb" not in task:
-            line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
-            line_2 = "\nכל צעדי הניסוי רלבנטיים להחלטה שלך\n"
-            line_3 = "\nלחץ/י ENTER להמשיך\n"
-            text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
-				     		        pos=(0,0),color = (1,1,1),
-                             		units = "pix", height = 32,wrapWidth=1500,
-                             		alignText = "center",languageStyle='RTL')
-            pin = 13
-
-
-        text_info_start.draw()
-        win0.flip()
-        parallel.setData(pin)
-        key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
-        if 'return' in key:
-            pass
-        win0.flip()
+                sub_id_array.append(sub_id)
+                block_array.append(phase)
+                final_gamble_array.append("no")
+                date_value_array.append(date_val)
+                loss = loss_array[trial]
+                if outcome[trial]==coin_heads[current_coin[trial].astype(int)]:
+                    outcome_stim_l, loss = outcome_stim_learn(loss,1)
+                else:
+                    outcome_stim_l, loss = outcome_stim_learn(loss,0)
+                outcome_stim_l.draw()
+                final_head_array.append(outcome[trial]==coin_heads[current_coin[trial].astype(int)])
+                final_loss_array.append(loss)
+                final_Mu_array.append(Mu[stim_generate[current_coin[trial].astype(int)]])
+                final_SD_array.append(SD[stim_generate[current_coin[trial].astype(int)]])
+                win0.flip()
+                parallel.setData(6) # show outcome learning
+                core.wait(1.5)
+                parallel.setData(0)
+                # clear the Screen
+                fixation_cross()
+                win0.flip()
+                parallel.setData(2)
+                core.wait(.1)
+                parallel.setData(0)
+                core.wait(.1)
+                final_outcome_array.append("NA")
+                final_task_array.append(task)
+                final_coin_side_1_array.append(coin_side_1[stim_coin[current_coin[trial].astype(int)]])
+                final_coin_side_2_array.append(coin_side_2[stim_coin[current_coin[trial].astype(int)]])
+                final_fix_time_array.append("NA")
+                final_estimation_mu.append("NA")
+                final_estimation_rangelow.append("NA")
+                final_estimation_range_high.append("NA")
+                final_estimation_confidence_mu.append("NA")
+                final_estimation_confidence_range.append("NA")
+                final_use_imagery.append("NA")
+                final_sure_option.append("NA")
+            # gambling part:
+            # if use_imagery[stim_generate[i]]==0 and "comb" in task:
+    for trial_gamble in range(low,high):
         parallel.setData(0)
         line_1 ="\nלחץ/י D אם את/ה רוצה להמר על תוצאות המטבע\n"
         line_2 = "\nאחרת, לחצ/י K אם את/ה מעדיפ/ה לקבל את הההפסד למטה\n"
@@ -907,23 +689,80 @@ for i in range(28):
                             units = "pix", height = 32,wrapWidth=1500,
                             alignText = "center",languageStyle='RTL')
         text_info_start.draw()
+        
         win0.flip()
-        parallel.setData(pin)
         key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
         if 'return' in key:
             pass
         win0.flip()
+        # Define loss_Mu as the Mu value for the current trial i
+        loss_Mu  = Mu[stim_generate[trial_gamble]] # what is the mu for the current trial i
+        # Determine the value of loss_SD_img and loss_SD_view based on the current trial's SD value
+        if SD[stim_generate[trial_gamble]] == "LH":
+            loss_SD_img = 1 
+            loss_SD_view = 6
+        elif SD[stim_generate[trial_gamble]] == "HL":
+            loss_SD_img = 6
+            loss_SD_view = 1
+        elif SD[stim_generate[trial_gamble]] == "MH":
+            loss_SD_img = 3
+            loss_SD_view = 6
+        elif SD[stim_generate[trial_gamble]] == "MM":
+            loss_SD_img = 3
+            loss_SD_view = 3
+        # Create an array of sure options based on the loss_Mu and loss_SD_view values
         sure_options = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
             loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
             loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
-        if i==1: # for the one trial where there is only imagery
-            sure_options = np.array([loss_Mu+loss_SD_img+1,loss_Mu+loss_SD_img-1,
-                loss_Mu+loss_SD_img,loss_Mu-loss_SD_img-1,
-                loss_Mu-loss_SD_img+1,loss_Mu-loss_SD_img])
-        print("gamble")
-        for l in range(5):
+        loss_array_view = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
+            loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
+            loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
+        loss_array_all = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
+            loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
+            loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view,
+            loss_Mu+loss_SD_img+1,loss_Mu+loss_SD_img-1,
+            loss_Mu+loss_SD_img,loss_Mu-loss_SD_img-1,
+            loss_Mu-loss_SD_img+1,loss_Mu-loss_SD_img])
+        sure_options = np.append(sure_options,sure_options)
+        for l in range(4):
+            if l%2 == 0 :
+                line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
+                line_2 = "\nאבל, התוצאות שהתקבלו בדמיון, אינם רלבנטיות להחלטה שלך\n"
+                line_3 = "\nלחץ/י ENTER להמשיך\n"
+                text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
+                                        pos=(0,0),color = (1,1,1),
+                                        units = "pix", height = 32,wrapWidth=1500,
+                                        alignText = "center",languageStyle='RTL')
+                pin = 12
+            elif l % 2 == 1:
+                line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
+                line_2 = "\nהתוצאות שהתקבלו בדמיון רלבנטיות במידה דומה לשאר התוצאות בהחלטה שלך\n"
+                line_3 = "\nלחץ/י ENTER להמשיך\n"
+                text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
+                                        pos=(0,0),color = (1,1,1),
+                                        units = "pix", height = 32,wrapWidth=1500,
+                                        alignText = "center",languageStyle='RTL')
+                pin = 11
+            elif "comb" not in task:
+                line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
+                line_2 = "\nכל צעדי הניסוי רלבנטיים להחלטה שלך\n"
+                line_3 = "\nלחץ/י ENTER להמשיך\n"
+                text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3,
+                                        pos=(0,0),color = (1,1,1),
+                                        units = "pix", height = 32,wrapWidth=1500,
+                                        alignText = "center",languageStyle='RTL')
+                pin = 13                    
+            text_info_start.draw()
+            win0.flip()
+            parallel.setData(pin)
+            key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
+            if 'return' in key:
+                pass
+            win0.flip()
+            # Shuffle the order of the sure options
             np.random.shuffle(sure_options)
-            for s in range(6):
+            # Iterate through each option in the sure options array
+            for s in range(12):
                 fixation_cross()
                 # flip window onto the screen
                 win0.flip()
@@ -934,24 +773,27 @@ for i in range(28):
                 # wait 1 sec
                 core.wait(time_fixation-0.2)
                 win0.flip()
-                final_coin_side_1_array.append(coin_side_1[stim_coin[i]])
-                final_coin_side_2_array.append(coin_side_2[stim_coin[i]])
+                # Append the relevant information to the relevant arrays
+                final_coin_side_1_array.append(coin_side_1[stim_coin[trial_gamble]])
+                final_coin_side_2_array.append(coin_side_2[stim_coin[trial_gamble]])
                 final_fix_time_array.append(time_fixation)
-                trial_no.append(i)
+                trial_no.append(f'loop: {l}_option: {s}')
                 time_value_array.append(datetime.now().strftime("%H%M%S"))
                 sub_id_array.append(sub_id)
                 date_value_array.append(date_val)
                 block_array.append(phase)
-                final_Mu_array.append(Mu[stim_generate[i]])
-                final_SD_array.append(SD[stim_generate[i]])
-                final_head_array.append(coin_heads[i])
+                final_Mu_array.append(Mu[stim_generate[trial_gamble]])
+                final_SD_array.append(SD[stim_generate[trial_gamble]])
+                final_head_array.append(coin_heads[trial_gamble])
                 final_outcome_array.append("NA")
                 final_task_array.append(task)
                 final_sure_option.append(sure_options[s])
+                # Create a visual text stimulus to display the current sure option
                 text_mu = visual.TextStim(win0,text=sure_options[s],
                                              pos=(200,-20),color = (1,1,1),
                                              units = "pix", height = 32,wrapWidth=1500,
                                              alignText = "center")
+                # Create a visual text stimulus to display the "loss" message in Hebrew
                 text_half = visual.TextStim(win0,text="הפסד בטוח",
                                              pos=(200,20),color = (1,1,1),
                                              units = "pix", height = 32,wrapWidth=1500,
@@ -964,6 +806,8 @@ for i in range(28):
                 text_half.draw()
                 text_coin.draw()
                 text_mu.draw()
+                image_stim(coin_side_1[current_coin[trial_gamble].astype(int)],coin_side_2[current_coin[trial_gamble].astype(int)],
+                    gamble=True)
                 win0.flip()
                 parallel.setData(14)
                 start_time = clock.getTime()
@@ -973,7 +817,7 @@ for i in range(28):
                 if key is None:
                     print('did not press at all')
                     sub_response_array.append(999)
-                    response_latency.append(1000)
+                    response_latency.append(99999)
                 else:
                     if 'd' in key: # d is for match
                         print('pressed gamble')
@@ -995,15 +839,15 @@ for i in range(28):
                         response_latency.append(round(stop_time-start_time,4)*1000)
                         break_flag = 1
                         break
-                final_use_imagery.append(use_imagery[stim_generate[i]])
-                if gamble==1 and use_imagery[stim_generate[i]]==0:
+                if gamble==1 and l%2 == 0:
                     loss = outcome_stim_gamble(sure_options[s],loss_array_view,1)
-                elif gamble==1 and use_imagery[stim_generate[i]]==1:
-                    loss = outcome_stim_gamble(sure_options[s],loss_array,1)
+                elif gamble==1 and l%2 == 1:
+                    loss = outcome_stim_gamble(sure_options[s],loss_array_all,1)
                 elif gamble==0:
-                    loss = outcome_stim_gamble(sure_options[s],loss_array,0)
+                    loss = outcome_stim_gamble(sure_options[s],loss_array_all,0)
                 core.wait(0.05)
                 parallel.setData(0)
+                final_use_imagery.append(l%2)
                 final_loss_array.append(loss)
                 final_task_comb_array.append("NA")
                 final_estimation_mu.append("NA")
@@ -1074,18 +918,18 @@ for i in range(28):
         parallel.setData(0)
         final_estimation_confidence_range.append(Value_conf.getRating())
         block_array.append(phase)
-        trial_no.append(i)
+        trial_no.append(f'loop: {l}')
         sub_id_array.append(sub_id)
         sub_response_array.append("NA")
         response_latency.append("NA")
         date_value_array.append(date_val)
         time_value_array.append(datetime.now().strftime("%H%M%S"))
-        final_coin_side_1_array.append(coin_side_1[stim_coin[i]])
-        final_coin_side_2_array.append(coin_side_2[stim_coin[i]])
-        final_Mu_array.append(Mu[stim_generate[i]])
-        final_SD_array.append(SD[stim_generate[i]])
-        final_head_array.append(coin_heads[i])
-        final_outcome_array.append(outcome[j])
+        final_coin_side_1_array.append(coin_side_1[stim_coin[trial_gamble]])
+        final_coin_side_2_array.append(coin_side_2[stim_coin[trial_gamble]])
+        final_Mu_array.append(Mu[stim_generate[trial_gamble]])
+        final_SD_array.append(SD[stim_generate[trial_gamble]])
+        final_head_array.append(coin_heads[trial_gamble])
+        final_outcome_array.append(outcome[trial])
         final_task_comb_array.append("NA")
         final_task_array.append(task)
         final_gamble_array.append("no")
@@ -1093,11 +937,12 @@ for i in range(28):
         final_use_imagery.append("NA")
         final_fix_time_array.append("NA")
         final_sure_option.append("NA")
-
         save_results(save_file_name)
         if break_flag==1:
             break
-
+    return 
+create_trials(low = 0,high = 2)
+create_trials(low = 2,high = 4)
 '''
 print(len(trial_no))
 print(len(time_value_array))
@@ -1106,7 +951,6 @@ print(len(date_value_array))
 print(len(final_fix_time_array))
 print(len(sub_response_array))
 print(len(final_coin_side_1_array))
-print(len(final_coin_side_2_array))
 print(len(final_coin_side_2_array))
 print(len(response_latency))
 print(len(block_array))
@@ -1125,12 +969,8 @@ print(len(final_estimation_confidence_range))
 print(len(final_sure_option))
 '''
 # create a data frame:
-
-
-
-
 # save the file
-save_results()
+save_results(save_file_name)
 # tidy up our resorces
 win0.close()
 print("OK, program has now closed")

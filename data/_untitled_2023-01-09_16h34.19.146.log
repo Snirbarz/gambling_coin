@@ -1,0 +1,19 @@
+0.7355 	WARNING 	Speech-to-text recognition module for PocketSphinx is not available (use command `pip install SpeechRecognition` to get it). Transcription will be unavailable using that service this session.
+0.7359 	WARNING 	Speech-to-text recognition using Google online services is not available (use command `pip install google-api-core google-auth google-cloud google-cloud-speech googleapis-common-protos` to get it). Transcription will be unavailable using that service this session.
+1.5141 	WARNING 	We strongly recommend you activate the PTB sound engine in PsychoPy prefs as the preferred audio engine. Its timing is vastly superior. Your prefs are currently set to use ['sounddevice', 'PTB', 'pyo', 'pygame'] (in that order).
+4.3075 	WARNING 	User requested fullscreen with size [1024  768], but screen is actually [3072, 1920]. Using actual size
+4.7707 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0, 0, 0]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x0000020FA282FA90>, gamma=None, gammaErrorPolicy='raise', lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x0000020FA3509D60>, multiSample=False, name='window1', numSamples=2, pos=(0, 0), screen=0, size=array([3072, 1920]), stencilBits=0, stereo=False, units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+4.7711 	EXP 	window1: mouseVisible = True
+4.7711 	EXP 	window1: Attempting to measure frame rate of screen (0) ...
+4.7712 	EXP 	window1: recordFrameIntervals = False
+4.8530 	EXP 	window1: recordFrameIntervals = True
+4.9389 	WARNING 	t of last frame was 10.26ms (=1/97)
+4.9624 	EXP 	Screen (0) actual frame rate measured at 120.38Hz
+4.9624 	EXP 	window1: recordFrameIntervals = False
+6.6284 	EXP 	Created coin = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, anchor=('center', 'center'), autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, image='sin', interpolate=True, mask=None, maskParams=None, name='coin', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5, 0.5]), texRes=128.0, units='height', win=Window(...))
+6.6312 	EXP 	Created cross = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, anchor=('center', 'center'), autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-1.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='cross', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.5, 0.5]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+6.6365 	EXP 	Imported conditions.xlsx as conditions, 4 conditions, 2 params
+6.6370 	EXP 	Created sequence: random, trialTypes=4, nReps=8, seed=None
+6.6372 	EXP 	New trial (rep=0, index=0): {'side1': 4, 'side2': 8}
+6.6377 	DEPRECATION 	Couldn't find image data/Stim0$side1.png; check path? (tried: C:\Users\sniri\OneDrive\Documents\PhD\Dissertation\Experiment\python\gambling_coin\data\Stim0$side1.png)
+6.6610 	EXP 	window1: mouseVisible = True
