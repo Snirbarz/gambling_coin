@@ -134,14 +134,14 @@ cur_time = datetime.now().strftime('%H%M%S')
 # create variables
 no_trials = 4 # number of total trials (equal to number of unique coins)
 Mu = np.array([-10,-10,-10,-10]) # the mean of the coin which is the same for both imagination and view trials.
-SD = np.array(["LH","HL","MH","MM"]) # The distribution width of the imagined and real outcomes the first letter is for the imagination trials.
+SD = np.array(["LH","HL","LH","MM"]) # The distribution width of the imagined and real outcomes the first letter is for the imagination trials.
 test_task = np.random.permutation(np.array(["comb_1"]))# task in the test blocks
 coin_array = np.array(range(no_trials))# number of coins (4)
 coin_sides = np.array([0,1,2,3,4,5,6,7])
 coin_sides = np.random.permutation(coin_sides)
 
 coin_side_1 = np.array(coin_sides[0:4]) # side 1 index of the coin
-coin_side_2 = np.array(coin_sides[4:8])  # side 2 index of the coin
+coin_side_2 = np.array(coin_sides[4:8]) # side 2 index of the coin
 for i in range(no_trials):
     if coin_side_1[i] > coin_side_2[i]:
         tmp_side_1 = coin_side_1[i]
@@ -184,16 +184,14 @@ sub_id = show_dlg[1]
 stim_coin = []
 stim_generate = [] # decide which combination of mu and SD is selected for the current trial.
 new_coin_array = np.random.permutation(coin_array) # the coin sides themselves are completely random
-new_generate_array = np.random.permutation(coin_array[4:28]) # the combination of mu and SD is deterministic for the first 4 trials and then random for the rest.
-new_generate_array=np.concatenate((range(4),new_generate_array),axis = None) # create array separating the first 4 training trials from the last 24 trials
 for n in range(no_trials):
     stim_coin.append(new_coin_array[n])
     stim_generate.append(new_coin_array[n])
     cur_time_array.append(datetime.now().strftime('%H%M%S'))
 stim_coin = np.array(stim_coin).flatten()
-print(stim_coin)
+print("stim_coin",stim_coin)
 stim_generate = np.array(stim_generate).flatten()
-print(stim_generate)
+print("stim_generate",stim_generate)
 cur_time_array = np.array(cur_time_array).flatten()
 
 # create gamble array
@@ -475,17 +473,8 @@ if 'return' in key:
 win0.flip()
 # update the subject on what to do:
 
-line_1 =" \nבמטלה הבאה, תתבקש/י ללמוד את הערכים השונים האפשריים בהטלת המטבע\n"
-line_2 = "\nראשית, את/ה תצפה/י בשני צדי המטבע.\n"
-line_3 = "\nשנית, תופיע בפניך הטלת המטבע עם תוצאה אקראית שתופיע על המסך.\n"
-line_4 = "\nאחרי שלב הלמידה, תעבור/י לשלב הימורים הקשור למה שלמדת.\n"
-line_5 = "\nלחץ/י ENTER להמשיך\n"
-text_info_start = visual.TextStim(win0,text=line_1+line_2+line_3+line_4+line_5,
-				             pos=(0,0),color = (1,1,1),
-                             units = "pix", height = 32,wrapWidth=1500,
-                             alignText = "center",languageStyle='RTL')
-
-text_info_start.draw()
+image_ins = visual.ImageStim(win0, image="instructions_2.JPG")
+image_ins.draw()
 win0.flip()
 parallel.setData(10) # instructions learning
 key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
@@ -493,7 +482,15 @@ if 'return' in key:
     pass
 win0.flip()
 parallel.setData(0)
-
+image_ins = visual.ImageStim(win0, image="instructions_1.JPG")
+image_ins.draw()
+win0.flip()
+parallel.setData(10) # instructions learning
+key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
+if 'return' in key:
+    pass
+win0.flip()
+parallel.setData(0)
 
 def create_trials(low,high):
     break_flag=0
@@ -505,17 +502,14 @@ def create_trials(low,high):
     for coin in range(low,high):
             # what is the mu for the current trial i
             loss_Mu  = Mu[stim_generate[coin]] 
-            if SD[stim_generate[coin]] == "LH":
+            if SD[coin] == "LH":
                 # set loss_SD_img and loss_SD_view based on value of SD
                 loss_SD_img = 1 
                 loss_SD_view = 6
-            elif SD[stim_generate[coin]] == "HL":
+            elif SD[coin] == "HL":
                 loss_SD_img = 6
                 loss_SD_view = 1
-            elif SD[stim_generate[coin]] == "MH":
-                loss_SD_img = 3
-                loss_SD_view = 6
-            elif SD[stim_generate[coin]] == "MM":
+            elif SD[coin] == "MM":
                 loss_SD_img = 3
                 loss_SD_view = 3
             # create loss array for view trials, imagination trials, and combined imagination and view trials.
@@ -562,7 +556,7 @@ def create_trials(low,high):
     print("task_array",task_array)
     print("loss_array",loss_array)
     print("outcome",outcome)
-    for trial in range(48):
+    for trial in range(2):
             phase = "training"
             task = "comb"
             parallel.setData(0)
@@ -653,7 +647,8 @@ def create_trials(low,high):
                 final_head_array.append(outcome[trial]==coin_heads[current_coin[trial].astype(int)])
                 final_loss_array.append(loss)
                 final_Mu_array.append(Mu[stim_generate[current_coin[trial].astype(int)]])
-                final_SD_array.append(SD[stim_generate[current_coin[trial].astype(int)]])
+                print("SD",SD[stim_generate==current_coin[trial].astype(int)])
+                final_SD_array.append(SD[stim_generate==current_coin[trial].astype(int)])
                 win0.flip()
                 parallel.setData(6) # show outcome learning
                 core.wait(1.5)
@@ -679,6 +674,7 @@ def create_trials(low,high):
                 final_sure_option.append("NA")
             # gambling part:
             # if use_imagery[stim_generate[i]]==0 and "comb" in task:
+    
     for trial_gamble in range(low,high):
         parallel.setData(0)
         line_1 ="\nלחץ/י D אם את/ה רוצה להמר על תוצאות המטבע\n"
@@ -698,16 +694,13 @@ def create_trials(low,high):
         # Define loss_Mu as the Mu value for the current trial i
         loss_Mu  = Mu[stim_generate[trial_gamble]] # what is the mu for the current trial i
         # Determine the value of loss_SD_img and loss_SD_view based on the current trial's SD value
-        if SD[stim_generate[trial_gamble]] == "LH":
+        if SD[trial_gamble] == "LH":
             loss_SD_img = 1 
             loss_SD_view = 6
-        elif SD[stim_generate[trial_gamble]] == "HL":
+        elif SD[trial_gamble] == "HL":
             loss_SD_img = 6
             loss_SD_view = 1
-        elif SD[stim_generate[trial_gamble]] == "MH":
-            loss_SD_img = 3
-            loss_SD_view = 6
-        elif SD[stim_generate[trial_gamble]] == "MM":
+        elif SD[trial_gamble] == "MM":
             loss_SD_img = 3
             loss_SD_view = 3
         # Create an array of sure options based on the loss_Mu and loss_SD_view values
@@ -783,7 +776,7 @@ def create_trials(low,high):
                 date_value_array.append(date_val)
                 block_array.append(phase)
                 final_Mu_array.append(Mu[stim_generate[trial_gamble]])
-                final_SD_array.append(SD[stim_generate[trial_gamble]])
+                final_SD_array.append(SD[trial_gamble])
                 final_head_array.append(coin_heads[trial_gamble])
                 final_outcome_array.append("NA")
                 final_task_array.append(task)
@@ -856,6 +849,20 @@ def create_trials(low,high):
                 final_estimation_range_high.append("NA")
                 final_estimation_confidence_mu.append("NA")
                 final_estimation_confidence_range.append("NA")
+        win0.flip()
+        if trial_gamble == 0:
+            # update the subject on what to do:
+            line_1 ="\n אנא קרא/י לנסיינ/ית\n"
+            text_info_start = visual.TextStim(win0,text=line_1,
+                                      pos=(0,0),color = (1,1,1),
+                                      units = "pix", height = 32,wrapWidth=1500,
+                                      alignText = "center",languageStyle='RTL')
+            text_info_start.draw()
+            win0.flip()
+            key = event.waitKeys(maxWait = 9999,keyList = ["v"],clearEvents = True)
+            if 'return' in key:
+                pass
+            win0.flip()
         Value_Mu, text_mu = Value_slider_mu()
         continueRoutine = True
         parallel.setData(15)
@@ -927,7 +934,7 @@ def create_trials(low,high):
         final_coin_side_1_array.append(coin_side_1[stim_coin[trial_gamble]])
         final_coin_side_2_array.append(coin_side_2[stim_coin[trial_gamble]])
         final_Mu_array.append(Mu[stim_generate[trial_gamble]])
-        final_SD_array.append(SD[stim_generate[trial_gamble]])
+        final_SD_array.append(SD[trial_gamble])
         final_head_array.append(coin_heads[trial_gamble])
         final_outcome_array.append(outcome[trial])
         final_task_comb_array.append("NA")
@@ -942,6 +949,20 @@ def create_trials(low,high):
             break
     return 
 create_trials(low = 0,high = 2)
+win0.flip()
+# update the subject on what to do:
+line_1 ="\n אנא קרא/י לנסיינ/ית\n"
+text_info_start = visual.TextStim(win0,text=line_1,
+                                  pos=(0,0),color = (1,1,1),
+                                  units = "pix", height = 32,wrapWidth=1500,
+                                  alignText = "center",languageStyle='RTL')
+text_info_start.draw()
+win0.flip()
+key = event.waitKeys(maxWait = 9999,keyList = ["v"],clearEvents = True)
+if 'return' in key:
+    pass
+win0.flip()
+
 create_trials(low = 2,high = 4)
 '''
 print(len(trial_no))
