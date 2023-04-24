@@ -556,7 +556,7 @@ def create_trials(low,high):
     print("task_array",task_array)
     print("loss_array",loss_array)
     print("outcome",outcome)
-    for trial in range(2):
+    for trial in range(48):
             phase = "training"
             task = "comb"
             parallel.setData(0)
