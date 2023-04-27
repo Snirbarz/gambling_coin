@@ -132,23 +132,26 @@ print("finished")
 cur_time = datetime.now().strftime('%H%M%S') 
 
 # create variables
-no_trials = 4 # number of total trials (equal to number of unique coins)
-Mu = np.array([-10,-10,-10,-10]) # the mean of the coin which is the same for both imagination and view trials.
-SD = np.array(["LH","HL","LH","MM"]) # The distribution width of the imagined and real outcomes the first letter is for the imagination trials.
+no_trials = 5 # number of total trials (equal to number of unique coins)
+Mu = np.array([-10,-10,-10,-10,-10]) # the mean of the coin which is the same for both imagination and view trials.
+SD = np.array(["MM","LH","HL","LH","HL"]) # The distribution width of the imagined and real outcomes the first letter is for the imagination trials.
 test_task = np.random.permutation(np.array(["comb_1"]))# task in the test blocks
-coin_array = np.array(range(no_trials))# number of coins (4)
+coin_array = np.array(range(1,no_trials))# number of coins in test trials (4)
 coin_sides = np.array([0,1,2,3,4,5,6,7])
+coin_sides_training = np.array([8,9])
 coin_sides = np.random.permutation(coin_sides)
-
-coin_side_1 = np.array(coin_sides[0:4]) # side 1 index of the coin
-coin_side_2 = np.array(coin_sides[4:8]) # side 2 index of the coin
+coin_sides = np.append(coin_sides_training,coin_sides)
+print("coin_sides",coin_sides)
+coin_side_1 = np.array(coin_sides[[0,2,3,4,5]]) # side 1 index of the coin
+print("coin_sides1",coin_side_1)
+coin_side_2 = np.array(coin_sides[[1,6,7,8,9]]) # side 2 index of the coin
 for i in range(no_trials):
     if coin_side_1[i] > coin_side_2[i]:
         tmp_side_1 = coin_side_1[i]
         coin_side_1[i] = coin_side_2[i]
         coin_side_2[i] = tmp_side_1
 
-coin_heads = np.array([0,0,1,1]) # coin heads (1) or tails (0)
+coin_heads = np.array([0,0,0,1,1]) # coin heads (1) or tails (0)
 np.random.permutation(coin_heads) # permute which side is heads or tails
 
 cur_time_array = []
@@ -184,6 +187,7 @@ sub_id = show_dlg[1]
 stim_coin = []
 stim_generate = [] # decide which combination of mu and SD is selected for the current trial.
 new_coin_array = np.random.permutation(coin_array) # the coin sides themselves are completely random
+new_coin_array = np.append(np.array(0),new_coin_array)
 for n in range(no_trials):
     stim_coin.append(new_coin_array[n])
     stim_generate.append(new_coin_array[n])
@@ -304,7 +308,7 @@ def image_stim(image_type_1,image_type_2,gamble=False):
     image_type == 6, Stim07.png "wrench"
     image_type == 7, Stim08.png "house"
     '''
-    image_stim_name = ["01","02","03","04","05","06","07","08"]
+    image_stim_name = ["01","02","03","04","05","06","07","08","09","10"]
 
     image_right = visual.ImageStim(win = win0,
                                        image = "data/Circ" + image_stim_name[image_type_1] +".png",
@@ -336,7 +340,7 @@ def flip_stim(image_type_1,image_type_2,side):
     text_type == 6, "wrench"
     text_type == 7, "house"
     '''
-    image_stim_name = ["01","02","03","04","05","06","07","08"]
+    image_stim_name = ["01","02","03","04","05","06","07","08","09","10"]
     if side == 0: # is it the left image
         outcome_image = image_stim_name[image_type_1]
     else:  # is it the right image
@@ -491,8 +495,7 @@ if 'return' in key:
     pass
 win0.flip()
 parallel.setData(0)
-
-def create_trials(low,high):
+def create_trials(low,high,trial_n):
     break_flag=0
     # create trials for learning: 
     loss_array = np.array([])
@@ -556,7 +559,7 @@ def create_trials(low,high):
     print("task_array",task_array)
     print("loss_array",loss_array)
     print("outcome",outcome)
-    for trial in range(48):
+    for trial in range(trial_n):
             phase = "training"
             task = "comb"
             parallel.setData(0)
@@ -717,6 +720,19 @@ def create_trials(low,high):
             loss_Mu+loss_SD_img,loss_Mu-loss_SD_img-1,
             loss_Mu-loss_SD_img+1,loss_Mu-loss_SD_img])
         sure_options = np.append(sure_options,sure_options)
+        if trial_gamble == 0:
+            # update the subject on what to do:
+            line_1 ="\n אנא קרא/י לנסיינ/ית\n"
+            text_info_start = visual.TextStim(win0,text=line_1,
+                                      pos=(0,0),color = (1,1,1),
+                                      units = "pix", height = 32,wrapWidth=1500,
+                                      alignText = "center",languageStyle='RTL')
+            text_info_start.draw()
+            win0.flip()
+            key = event.waitKeys(maxWait = 9999,keyList = ["v"],clearEvents = True)
+            if 'return' in key:
+                pass
+            win0.flip()
         for l in range(4):
             if l%2 == 0 :
                 line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
@@ -948,7 +964,8 @@ def create_trials(low,high):
         if break_flag==1:
             break
     return 
-create_trials(low = 0,high = 2)
+create_trials(low = 0,high = 1,trial_n = 12)
+create_trials(low = 1,high = 3,trial_n = 48)
 win0.flip()
 # update the subject on what to do:
 line_1 ="\n אנא קרא/י לנסיינ/ית\n"
@@ -963,7 +980,7 @@ if 'return' in key:
     pass
 win0.flip()
 
-create_trials(low = 2,high = 4)
+create_trials(low = 3,high = 5,trial_n = 48)
 '''
 print(len(trial_no))
 print(len(time_value_array))
