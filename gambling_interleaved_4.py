@@ -717,6 +717,19 @@ def create_trials(low,high):
             loss_Mu+loss_SD_img,loss_Mu-loss_SD_img-1,
             loss_Mu-loss_SD_img+1,loss_Mu-loss_SD_img])
         sure_options = np.append(sure_options,sure_options)
+        if trial_gamble == 0:
+            # update the subject on what to do:
+            line_1 ="\n אנא קרא/י לנסיינ/ית\n"
+            text_info_start = visual.TextStim(win0,text=line_1,
+                                      pos=(0,0),color = (1,1,1),
+                                      units = "pix", height = 32,wrapWidth=1500,
+                                      alignText = "center",languageStyle='RTL')
+            text_info_start.draw()
+            win0.flip()
+            key = event.waitKeys(maxWait = 9999,keyList = ["v"],clearEvents = True)
+            if 'return' in key:
+                pass
+            win0.flip()
         for l in range(4):
             if l%2 == 0 :
                 line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
