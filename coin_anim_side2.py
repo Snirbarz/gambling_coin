@@ -15,9 +15,10 @@ class MyApp(ShowBase):
     def __init__(self):
         global i
         i = 0
-        self.coin_side_1 = np.array([0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,4,4,4,5,5,6])
-        self.coin_side_2 = np.array([1,2,3,4,5,6,7,2,3,4,5,6,7,3,4,5,6,7,4,5,6,7,5,6,7,6,7,7])
-
+        #self.coin_side_1 = np.array([0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,4,4,4,5,5,6])
+        #self.coin_side_2 = np.array([1,2,3,4,5,6,7,2,3,4,5,6,7,3,4,5,6,7,4,5,6,7,5,6,7,6,7,7])
+        self.coin_side_1 = np.array([8])
+        self.coin_side_2 = np.array([9])
         ShowBase.__init__(self)
         self.model = self.loader.load_model("cointest1.obj")
         self.model.setScale(1, 1, 1)
