@@ -1,0 +1,98 @@
+trial,time,id,Date,fix_time,response,side_1_stim,side_2_stim,latency,Block,Mu,SD,head,outcome,task,gamble_trial,loss,est_mu,est_low,est_high,conf_mu,conf_range,current_task,use_imagery,sure_option
+trial_learning: 0,114901,9999,2023-05-02,NA,6666,4,7,17053.899999999998,training,-10,['LH'],False,NA,comb,no,-12.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 1,114924,9999,2023-05-02,NA,6666,5,6,3068.0,training,-10,['HL'],False,NA,comb,no,-10.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 2,114932,9999,2023-05-02,NA,6666,4,7,55990.200000000004,training,-10,['LH'],True,NA,comb,no,-10.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 3,115033,9999,2023-05-02,NA,6666,5,6,559.5,training,-10,['HL'],False,NA,comb,no,-11.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 4,115039,9999,2023-05-02,NA,6666,4,7,1369.6999999999998,training,-10,['LH'],False,NA,comb,no,-17.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 5,115045,9999,2023-05-02,NA,6666,4,7,705.2,training,-10,['LH'],True,NA,comb,no,-3.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 6,115051,9999,2023-05-02,NA,6666,4,7,630.5,training,-10,['LH'],True,NA,comb,no,-3.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 7,115056,9999,2023-05-02,NA,6666,5,6,854.1999999999999,training,-10,['HL'],True,NA,comb,no,-8.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 8,115102,9999,2023-05-02,NA,6666,5,6,869.8000000000001,training,-10,['HL'],True,NA,comb,no,-8.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 9,115108,9999,2023-05-02,NA,6666,4,7,681.8,training,-10,['LH'],True,NA,comb,no,-4.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 10,115113,9999,2023-05-02,NA,6666,5,6,709.2,training,-10,['HL'],True,NA,comb,no,-5.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 11,115119,9999,2023-05-02,NA,6666,5,6,1269.8,training,-10,['HL'],False,NA,comb,no,-15.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 12,115125,9999,2023-05-02,NA,6666,4,7,1158.5,training,-10,['LH'],False,NA,comb,no,-11.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 13,115131,9999,2023-05-02,NA,6666,4,7,1256.3,training,-10,['LH'],False,NA,comb,no,-15.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 14,115137,9999,2023-05-02,NA,6666,5,6,1331.3999999999999,training,-10,['HL'],False,NA,comb,no,-17.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 15,115144,9999,2023-05-02,NA,6666,4,7,1846.1000000000001,training,-10,['LH'],False,NA,comb,no,-10.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 16,115151,9999,2023-05-02,NA,6666,4,7,1214.6,training,-10,['LH'],False,NA,comb,no,-15.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 17,115157,9999,2023-05-02,NA,6666,5,6,1663.7,training,-10,['HL'],True,NA,comb,no,-3.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 18,115203,9999,2023-05-02,NA,6666,5,6,1007.5000000000001,training,-10,['HL'],True,NA,comb,no,-9.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 19,115209,9999,2023-05-02,NA,6666,5,6,1480.3,training,-10,['HL'],False,NA,comb,no,-10.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 20,115216,9999,2023-05-02,NA,6666,4,7,1482.0,training,-10,['LH'],False,NA,comb,no,-16.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 21,115222,9999,2023-05-02,NA,6666,5,6,1169.4,training,-10,['HL'],False,NA,comb,no,-15.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 22,115228,9999,2023-05-02,NA,6666,4,7,1479.7,training,-10,['LH'],True,NA,comb,no,-9.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 23,115235,9999,2023-05-02,NA,6666,5,6,1182.3999999999999,training,-10,['HL'],False,NA,comb,no,-12.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 24,115241,9999,2023-05-02,NA,6666,4,7,801.6,training,-10,['LH'],False,NA,comb,no,-11.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 25,115247,9999,2023-05-02,NA,6666,4,7,2648.2000000000003,training,-10,['LH'],False,NA,comb,no,-17.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 26,115255,9999,2023-05-02,NA,6666,5,6,1847.0,training,-10,['HL'],False,NA,comb,no,-16.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 27,115302,9999,2023-05-02,NA,6666,4,7,14556.0,training,-10,['LH'],True,NA,comb,no,-4.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 28,115321,9999,2023-05-02,NA,6666,4,7,677.3000000000001,training,-10,['LH'],True,NA,comb,no,-10.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 29,115327,9999,2023-05-02,NA,6666,5,6,1452.0,training,-10,['HL'],False,NA,comb,no,-12.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 30,115333,9999,2023-05-02,NA,6666,5,6,412.4,training,-10,['HL'],True,NA,comb,no,-4.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 31,115339,9999,2023-05-02,NA,6666,5,6,1112.1000000000001,training,-10,['HL'],True,NA,comb,no,-3.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 32,115345,9999,2023-05-02,NA,6666,4,7,742.8000000000001,training,-10,['LH'],False,NA,comb,no,-10.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 33,115350,9999,2023-05-02,NA,6666,4,7,998.1999999999999,training,-10,['LH'],False,NA,comb,no,-12.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 34,115356,9999,2023-05-02,NA,6666,4,7,648.9,training,-10,['LH'],True,NA,comb,no,-8.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 35,115402,9999,2023-05-02,NA,6666,4,7,421.4,training,-10,['LH'],True,NA,comb,no,-5.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 36,115407,9999,2023-05-02,NA,6666,5,6,654.5999999999999,training,-10,['HL'],True,NA,comb,no,-9.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 37,115413,9999,2023-05-02,NA,6666,4,7,1066.8,training,-10,['LH'],True,NA,comb,no,-9.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 38,115419,9999,2023-05-02,NA,6666,5,6,832.6,training,-10,['HL'],True,NA,comb,no,-10.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 39,115425,9999,2023-05-02,NA,6666,4,7,711.4,training,-10,['LH'],True,NA,comb,no,-8.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 40,115430,9999,2023-05-02,NA,6666,5,6,1181.8,training,-10,['HL'],False,NA,comb,no,-11.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 41,115437,9999,2023-05-02,NA,6666,5,6,854.5,training,-10,['HL'],False,NA,comb,no,-17.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 42,115442,9999,2023-05-02,NA,6666,5,6,1519.7,training,-10,['HL'],True,NA,comb,no,-4.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 43,115449,9999,2023-05-02,NA,6666,5,6,649.7,training,-10,['HL'],False,NA,comb,no,-16.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 44,115454,9999,2023-05-02,NA,6666,4,7,866.8000000000001,training,-10,['LH'],False,NA,comb,no,-16.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 45,115500,9999,2023-05-02,NA,6666,5,6,1752.8999999999999,training,-10,['HL'],True,NA,comb,no,-5.0,NA,NA,NA,NA,NA,img,NA,NA
+trial_learning: 46,115507,9999,2023-05-02,NA,6666,5,6,646.2,training,-10,['HL'],True,NA,comb,no,-10.0,NA,NA,NA,NA,NA,view,NA,NA
+trial_learning: 47,115512,9999,2023-05-02,NA,6666,4,7,725.0,training,-10,['LH'],True,NA,comb,no,-5.0,NA,NA,NA,NA,NA,view,NA,NA
+loop: 0_option: 0,120516,9999,2023-05-02,0.4,1,1,2,23004.899999999998,training,-10,LH,0,NA,comb,yes,-17,NA,NA,NA,NA,NA,NA,0,-15
+loop: 0_option: 1,120539,9999,2023-05-02,0.4,1,1,2,2778.1,training,-10,LH,0,NA,comb,yes,-16,NA,NA,NA,NA,NA,NA,0,-16
+loop: 0_option: 2,120542,9999,2023-05-02,0.4,1,1,2,1646.9,training,-10,LH,0,NA,comb,yes,-17,NA,NA,NA,NA,NA,NA,0,-16
+loop: 0_option: 3,120545,9999,2023-05-02,0.4,0,1,2,2853.1,training,-10,LH,0,NA,comb,yes,-4,NA,NA,NA,NA,NA,NA,0,-4
+loop: 0_option: 4,120548,9999,2023-05-02,0.4,1,1,2,1586.8,training,-10,LH,0,NA,comb,yes,-17,NA,NA,NA,NA,NA,NA,0,-17
+loop: 0_option: 5,120550,9999,2023-05-02,0.4,1,1,2,1260.1,training,-10,LH,0,NA,comb,yes,-17,NA,NA,NA,NA,NA,NA,0,-17
+loop: 0_option: 6,120552,9999,2023-05-02,0.4,1,1,2,1378.6000000000001,training,-10,LH,0,NA,comb,yes,-17,NA,NA,NA,NA,NA,NA,0,-15
+loop: 0_option: 7,120554,9999,2023-05-02,0.4,0,1,2,2241.2000000000003,training,-10,LH,0,NA,comb,yes,-5,NA,NA,NA,NA,NA,NA,0,-5
+loop: 0_option: 8,120556,9999,2023-05-02,0.4,0,1,2,1443.3,training,-10,LH,0,NA,comb,yes,-3,NA,NA,NA,NA,NA,NA,0,-3
+loop: 0_option: 9,120558,9999,2023-05-02,0.4,0,1,2,2040.0,training,-10,LH,0,NA,comb,yes,-5,NA,NA,NA,NA,NA,NA,0,-5
+loop: 0_option: 10,120601,9999,2023-05-02,0.4,0,1,2,1869.5,training,-10,LH,0,NA,comb,yes,-3,NA,NA,NA,NA,NA,NA,0,-3
+loop: 0_option: 11,120603,9999,2023-05-02,0.4,0,1,2,1550.0,training,-10,LH,0,NA,comb,yes,-4,NA,NA,NA,NA,NA,NA,0,-4
+loop: 1_option: 0,120645,9999,2023-05-02,0.4,0,1,2,6060.8,training,-10,LH,0,NA,comb,yes,-5,NA,NA,NA,NA,NA,NA,1,-5
+loop: 1_option: 1,120651,9999,2023-05-02,0.4,1,1,2,1593.6,training,-10,LH,0,NA,comb,yes,-11,NA,NA,NA,NA,NA,NA,1,-15
+loop: 1_option: 2,120653,9999,2023-05-02,0.4,1,1,2,1433.6,training,-10,LH,0,NA,comb,yes,-16,NA,NA,NA,NA,NA,NA,1,-17
+loop: 1_option: 3,120655,9999,2023-05-02,0.4,0,1,2,1421.1000000000001,training,-10,LH,0,NA,comb,yes,-5,NA,NA,NA,NA,NA,NA,1,-5
+loop: 1_option: 4,120657,9999,2023-05-02,0.4,0,1,2,1187.0,training,-10,LH,0,NA,comb,yes,-4,NA,NA,NA,NA,NA,NA,1,-4
+loop: 1_option: 5,120659,9999,2023-05-02,0.4,1,1,2,1195.0,training,-10,LH,0,NA,comb,yes,-9,NA,NA,NA,NA,NA,NA,1,-16
+loop: 1_option: 6,120701,9999,2023-05-02,0.4,1,1,2,1612.8,training,-10,LH,0,NA,comb,yes,-5,NA,NA,NA,NA,NA,NA,1,-15
+loop: 1_option: 7,120703,9999,2023-05-02,0.4,0,1,2,1371.5,training,-10,LH,0,NA,comb,yes,-3,NA,NA,NA,NA,NA,NA,1,-3
+loop: 1_option: 8,120705,9999,2023-05-02,0.4,1,1,2,1929.5,training,-10,LH,0,NA,comb,yes,-11,NA,NA,NA,NA,NA,NA,1,-16
+loop: 1_option: 9,120707,9999,2023-05-02,0.4,0,1,2,2257.0,training,-10,LH,0,NA,comb,yes,-4,NA,NA,NA,NA,NA,NA,1,-4
+loop: 1_option: 10,120710,9999,2023-05-02,0.4,0,1,2,1531.1999999999998,training,-10,LH,0,NA,comb,yes,-3,NA,NA,NA,NA,NA,NA,1,-3
+loop: 1_option: 11,120712,9999,2023-05-02,0.4,1,1,2,1376.4,training,-10,LH,0,NA,comb,yes,-10,NA,NA,NA,NA,NA,NA,1,-17
+loop: 2_option: 0,120939,9999,2023-05-02,0.4,0,1,2,202.5,training,-10,LH,0,NA,comb,yes,-15,NA,NA,NA,NA,NA,NA,0,-15
+loop: 2_option: 1,120940,9999,2023-05-02,0.4,0,1,2,200.3,training,-10,LH,0,NA,comb,yes,-16,NA,NA,NA,NA,NA,NA,0,-16
+loop: 2_option: 2,120941,9999,2023-05-02,0.4,0,1,2,123.1,training,-10,LH,0,NA,comb,yes,-15,NA,NA,NA,NA,NA,NA,0,-15
+loop: 2_option: 3,120941,9999,2023-05-02,0.4,0,1,2,177.1,training,-10,LH,0,NA,comb,yes,-5,NA,NA,NA,NA,NA,NA,0,-5
+loop: 2_option: 4,120942,9999,2023-05-02,0.4,0,1,2,127.5,training,-10,LH,0,NA,comb,yes,-3,NA,NA,NA,NA,NA,NA,0,-3
+loop: 2_option: 5,120943,9999,2023-05-02,0.4,0,1,2,201.1,training,-10,LH,0,NA,comb,yes,-16,NA,NA,NA,NA,NA,NA,0,-16
+loop: 2_option: 6,120943,9999,2023-05-02,0.4,0,1,2,175.1,training,-10,LH,0,NA,comb,yes,-17,NA,NA,NA,NA,NA,NA,0,-17
+loop: 2_option: 7,120944,9999,2023-05-02,0.4,0,1,2,108.3,training,-10,LH,0,NA,comb,yes,-4,NA,NA,NA,NA,NA,NA,0,-4
+loop: 2_option: 8,120945,9999,2023-05-02,0.4,0,1,2,145.2,training,-10,LH,0,NA,comb,yes,-5,NA,NA,NA,NA,NA,NA,0,-5
+loop: 2_option: 9,120945,9999,2023-05-02,0.4,0,1,2,179.7,training,-10,LH,0,NA,comb,yes,-3,NA,NA,NA,NA,NA,NA,0,-3
+loop: 2_option: 10,120946,9999,2023-05-02,0.4,0,1,2,180.7,training,-10,LH,0,NA,comb,yes,-17,NA,NA,NA,NA,NA,NA,0,-17
+loop: 2_option: 11,120947,9999,2023-05-02,0.4,0,1,2,194.5,training,-10,LH,0,NA,comb,yes,-4,NA,NA,NA,NA,NA,NA,0,-4
+loop: 3_option: 0,120948,9999,2023-05-02,0.4,0,1,2,302.3,training,-10,LH,0,NA,comb,yes,-3,NA,NA,NA,NA,NA,NA,1,-3
+loop: 3_option: 1,120949,9999,2023-05-02,0.4,0,1,2,90.1,training,-10,LH,0,NA,comb,yes,-17,NA,NA,NA,NA,NA,NA,1,-17
+loop: 3_option: 2,120949,9999,2023-05-02,0.4,0,1,2,165.7,training,-10,LH,0,NA,comb,yes,-15,NA,NA,NA,NA,NA,NA,1,-15
+loop: 3_option: 3,120950,9999,2023-05-02,0.4,0,1,2,121.7,training,-10,LH,0,NA,comb,yes,-15,NA,NA,NA,NA,NA,NA,1,-15
+loop: 3_option: 4,120951,9999,2023-05-02,0.4,0,1,2,145.3,training,-10,LH,0,NA,comb,yes,-5,NA,NA,NA,NA,NA,NA,1,-5
+loop: 3_option: 5,120951,9999,2023-05-02,0.4,0,1,2,97.3,training,-10,LH,0,NA,comb,yes,-4,NA,NA,NA,NA,NA,NA,1,-4
+loop: 3_option: 6,120952,9999,2023-05-02,0.4,0,1,2,414.9,training,-10,LH,0,NA,comb,yes,-3,NA,NA,NA,NA,NA,NA,1,-3
+loop: 3_option: 7,120953,9999,2023-05-02,0.4,0,1,2,423.70000000000005,training,-10,LH,0,NA,comb,yes,-16,NA,NA,NA,NA,NA,NA,1,-16
+loop: 3_option: 8,120954,9999,2023-05-02,0.4,0,1,2,395.3,training,-10,LH,0,NA,comb,yes,-16,NA,NA,NA,NA,NA,NA,1,-16
+loop: 3_option: 9,120955,9999,2023-05-02,0.4,0,1,2,381.79999999999995,training,-10,LH,0,NA,comb,yes,-5,NA,NA,NA,NA,NA,NA,1,-5
+loop: 3_option: 10,120956,9999,2023-05-02,0.4,0,1,2,415.7,training,-10,LH,0,NA,comb,yes,-17,NA,NA,NA,NA,NA,NA,1,-17
+loop: 3_option: 11,120956,9999,2023-05-02,0.4,0,1,2,327.40000000000003,training,-10,LH,0,NA,comb,yes,-4,NA,NA,NA,NA,NA,NA,1,-4
+loop: 3,121150,9999,2023-05-02,NA,NA,1,2,NA,training,-10,LH,0,1.0,comb,no,NA,-10.0,-3.0,-16.9,11.9,15.1,NA,NA,NA

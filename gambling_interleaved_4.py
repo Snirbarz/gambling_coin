@@ -477,7 +477,7 @@ if 'return' in key:
 win0.flip()
 # update the subject on what to do:
 
-image_ins = visual.ImageStim(win0, image="instructions_2.JPG")
+image_ins = visual.ImageStim(win0, image="instructions_1.JPG")
 image_ins.draw()
 win0.flip()
 parallel.setData(10) # instructions learning
@@ -486,7 +486,7 @@ if 'return' in key:
     pass
 win0.flip()
 parallel.setData(0)
-image_ins = visual.ImageStim(win0, image="instructions_1.JPG")
+image_ins = visual.ImageStim(win0, image="instructions_2.JPG")
 image_ins.draw()
 win0.flip()
 parallel.setData(10) # instructions learning
