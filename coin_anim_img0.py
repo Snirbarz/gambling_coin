@@ -24,7 +24,7 @@ class MyApp(ShowBase):
         self.model.setPos(0, 0, 0)
         self.model.setHpr(self.model, 0,90,0)
         self.model.reparent_to(self.render)
-        self.myInterval1 = self.model.hprInterval(1, Vec3(0,90,1080))
+        self.myInterval1 = self.model.hprInterval(2, Vec3(0,90,1080))
         self.setBackgroundColor(0,0,0)
         # Add the spinCameraTask procedure to the task manager.
         self.taskMgr.add(self.spinCameraTask, "SpinCameraTask")
@@ -41,7 +41,7 @@ class MyApp(ShowBase):
         rotateCoin = Sequence(self.myInterval1,name = "Rotate")
         rotateCoin.start()
         self.taskMgr.add(self.record,"record")
-
+        i=+1
     def taskStop(task):
         base.graphicsEngine.removeAllWindows()
     def save(self,task):

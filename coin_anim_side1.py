@@ -15,17 +15,15 @@ class MyApp(ShowBase):
     def __init__(self):
         global i
         i = 0
-        #self.coin_side_1 = np.array([0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,4,4,4,5,5,6])
-        #self.coin_side_2 = np.array([1,2,3,4,5,6,7,2,3,4,5,6,7,3,4,5,6,7,4,5,6,7,5,6,7,6,7,7])
-        self.coin_side_1 = np.array([8])
-        self.coin_side_2 = np.array([9])
+        self.coin_side_1 = np.array([0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,4,4,4,5,5,6,8])
+        self.coin_side_2 = np.array([1,2,3,4,5,6,7,2,3,4,5,6,7,3,4,5,6,7,4,5,6,7,5,6,7,6,7,7,9])
         ShowBase.__init__(self)
         self.model = self.loader.load_model("cointest1.obj")
         self.model.setScale(1, 1, 1)
         self.model.setPos(0, 0, 0)
         self.model.setHpr(self.model, 0,90,0)
         self.model.reparent_to(self.render)
-        self.myInterval1 = self.model.hprInterval(1, Vec3(0,90,1080))
+        self.myInterval1 = self.model.hprInterval(2, Vec3(0,90,1080)) # change the first value in hprInterval to adjust the rotation time
         self.setBackgroundColor(0,0,0)
         # Add the spinCameraTask procedure to the task manager.
         self.taskMgr.add(self.spinCameraTask, "SpinCameraTask")

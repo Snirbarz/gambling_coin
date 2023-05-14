@@ -4,23 +4,20 @@ Stimuli: all presented at 80cm away from the screen
               thickness will be 0.1 degress VA =
               500-1000ms (core.wait(1000),time.sleep(1))
     instructions:
-              participants recieve 200 credits in the begining of the Experiment
+              participants recieve 20 shekels in the begining of the Experiment
               they are told that they are going to participate in a gambling task
-              where they will choose to gamble on a result of a coin.
-              If they lose, they lost the amount, if they win, they lose a smaller amount.
-              If they don't gamble they lost half of the amount.
-    Stimulus: 8 images from the exposure task
-              clustered into 28 pairs, each representing a single double sided coin
-              for each coin participant   view or imagine an outcome
+              where they will choose to gamble or not to gamble on a result of a coin.
+              They can receive half of a sure option. or bet on the coin. If they choose to gamble,
+              The coin will be tossed and the amount generated on it will be lost.
+    Stimulus: 10 images from the exposure task
+              clustered into 5 pairs, each representing a single double sided coin
+              for each coin participant view and imagine an outcome in different trials
 =======
-              for each coin participant view or imagine an outcome
-              When coin lands on heads- an outcome of 0 will be presented
-              When coin lands on tails an outcome mu ([-6,-8,-10]) and sd (1 or 2) will be generated
-              10 trials total, non biased coin (pseudorandomized).
 
-              images appear for max 1000ms
+
+              images appears for uninterrupted time until participants press space
               image at the center of the screen (size unknown)
-              white backgroud (rgb --> 1,1,1)
+              black backgroud (rgb --> -1,-1,-1)
               elvers.us/perception/visualAngleVA = figure out how to convert to cm and then pixels
               36 VA = (30.5425 cm) 1112 == 0
 
@@ -32,23 +29,18 @@ Stimuli: all presented at 80cm away from the screen
                            'd' is for choosing to gamble
                            'k' for choosing to receive the sure loss
     Task:
-            14.28% trials ==> training (2 imagination and 2 viewing; 4 coins)
-            46.42% trials ==> Imagination trials (12 coins)
-            46.42% of trials ==> Viewing trials (12 coins)
-    Experimental Session:
-            2 imagination trials
-            Other trials are randomized within 4 blocks, 6 trials each with 30 seconds rest in between
-            Presented in random order
+            training (1 coin)  ==> 12 trials total
+            block 1 (2 coins)  ==> 12 Imagination trials and 12 viewing trials per coin
+            block 2 (2 coins)  ==> 12 Imagination trials and 12 viewing trials per coin
     Trial:
-            show coin sides and whether it's an imagination or observe trial
-            fixation start (500ms)
+            show coin sides and whether it's an imagination or observation trial
+            fixation start (500ms) # Snir 
             imagination/viewing trial
             rate mean (0-20; no time limit)
             confidence rating  (0-100 VAS; no time limit)
             choose range (0-20; no time limit)
             confidence rating (0-100 VAS; no time limit)
-            gamble (show coin sides and choose to to either gamble or accept a specific loss; no time limit?)
-            show result? (500ms)
+            gamble (show coin sides and choose to to either gamble or accept a specific loss; no time limit)
     Triggers:
     Monitor specification
             Screen Width = 37.632cm
@@ -126,7 +118,7 @@ print("Output from save dialog")
 print(save_path)
 
 # print that the setup is finished
-print("finished")
+print("setup finished")
 
 # obtain the current time
 cur_time = datetime.now().strftime('%H%M%S') 
@@ -135,7 +127,6 @@ cur_time = datetime.now().strftime('%H%M%S')
 no_trials = 5 # number of total trials (equal to number of unique coins)
 Mu = np.array([-10,-10,-10,-10,-10]) # the mean of the coin which is the same for both imagination and view trials.
 SD = np.array(["MM","LH","HL","LH","HL"]) # The distribution width of the imagined and real outcomes the first letter is for the imagination trials.
-test_task = np.random.permutation(np.array(["comb_1"]))# task in the test blocks
 coin_array = np.array(range(1,no_trials))# number of coins in test trials (4)
 coin_sides = np.array([0,1,2,3,4,5,6,7])
 coin_sides_training = np.array([8,9])
@@ -145,6 +136,7 @@ print("coin_sides",coin_sides)
 coin_side_1 = np.array(coin_sides[[0,2,3,4,5]]) # side 1 index of the coin
 print("coin_sides1",coin_side_1)
 coin_side_2 = np.array(coin_sides[[1,6,7,8,9]]) # side 2 index of the coin
+#  swaps the values of the sides of the coin if the side 1 of the coin is greater than the side 2 of the coin.
 for i in range(no_trials):
     if coin_side_1[i] > coin_side_2[i]:
         tmp_side_1 = coin_side_1[i]
@@ -185,12 +177,13 @@ final_sure_option = [] #what was the sure option presented to participants
 sub_id = show_dlg[1]
 # Order the 4 training coins and 24 test coins
 stim_coin = []
-stim_generate = [] # decide which combination of mu and SD is selected for the current trial.
+
 new_coin_array = np.random.permutation(coin_array) # the coin sides themselves are completely random
 new_coin_array = np.append(np.array(0),new_coin_array)
+stim_generate = new_coin_array # decide which combination of mu and SD is selected for the current trial.
 for n in range(no_trials):
     stim_coin.append(new_coin_array[n])
-    stim_generate.append(new_coin_array[n])
+    
     cur_time_array.append(datetime.now().strftime('%H%M%S'))
 stim_coin = np.array(stim_coin).flatten()
 print("stim_coin",stim_coin)
@@ -203,7 +196,7 @@ logging.console.setLevel(logging.WARNING) # log warning messages
 print("*************************************")
 print("PSYCHOPY LOGGING set to : WARNING")
 print(datetime.now())
-print("Gambling TASK: version alpha")
+print("Gambling TASK: version beta")
 print("*************************************")
 
 # create the window object
@@ -218,18 +211,6 @@ win0 = visual.Window(size = (1280,1024),
                      )
 
 # For some reason the experiment works better if we play a video in the beginning thus we display the empty coin.
-# flip = visual.VlcMovieStim(win = win0,
-#          	    filename = "data/coin000000.avi",
-#                 units = "pix",
-#                 pos = (0,0),
-#                 autoStart=True)
-# flip.draw()
-# win0.flip()
-# while  not flip.isFinished:
-#      flip.draw()
-#      win0.flip()
-# flip.stop()
-# flip._closeMedia()
 flip = visual.VlcMovieStim(win = win0,
                 filename = "data/coin000000.avi",
                 units = "pix",
@@ -339,6 +320,8 @@ def flip_stim(image_type_1,image_type_2,side):
     text_type == 5, "pond"
     text_type == 6, "wrench"
     text_type == 7, "house"
+    text_type == 8, "sun"
+    text_type == 9, "pencil"
     '''
     image_stim_name = ["01","02","03","04","05","06","07","08","09","10"]
     if side == 0: # is it the left image
@@ -353,7 +336,7 @@ def flip_stim(image_type_1,image_type_2,side):
                                        noAudio=True)
     return coin_flip
 # create the outcome text for the learning trials.
-def outcome_stim_learn(loss,side):
+def outcome_stim_learn(loss):
     '''
     We are creating our outcome in the learning trials
     '''
@@ -496,12 +479,36 @@ if 'return' in key:
 win0.flip()
 parallel.setData(0)
 def create_trials(low,high,trial_n):
+    """
+    This function creates a list of trials for learning.
+
+    Parameters
+    ----------
+    low : int
+        The lower bound of the range of coins to use.
+    high : int
+        The upper bound of the range of coins to use.
+    trial_n : int
+        The number of trials to create.
+
+    Returns
+    -------
+    loss_array : np.array
+        An array of losses for each trial.
+    outcome : np.array
+        An array of outcomes for each trial.
+    current_coin : np.array
+        An array of the current coin for each trial.
+    task_array : np.array
+        An array of the task for each trial.
+    """
     break_flag=0
-    # create trials for learning: 
+    # Create empty arrays to store the losses, outcomes, and current coins.
     loss_array = np.array([])
     outcome = np.array([])
     current_coin = np.array([])
     task_array = np.array([])
+    # Iterate over the range of coins.
     for coin in range(low,high):
             # what is the mu for the current trial i
             loss_Mu  = Mu[stim_generate[coin]] 
@@ -515,7 +522,7 @@ def create_trials(low,high,trial_n):
             elif SD[coin] == "MM":
                 loss_SD_img = 3
                 loss_SD_view = 3
-            # create loss array for view trials, imagination trials, and combined imagination and view trials.
+            # create loss array for view trials, imagination trials.
             loss_array_tmp = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view+1,
                 loss_Mu+loss_SD_view-1,loss_Mu+loss_SD_view-1,
                 loss_Mu+loss_SD_view,loss_Mu+loss_SD_view,
@@ -534,7 +541,7 @@ def create_trials(low,high,trial_n):
             # flip values in outcome_tmp if coin_heads is 0
             task_array_tmp = np.array(["view","view","view","view","view","view","view","view","view","view","view","view",
                 "img","img","img","img","img","img","img","img","img","img","img","img"])
-            if coin_heads[coin]==1:
+            if coin_heads[coin]==1: 
                 # if coin heads is 1 then higher than avg loss is received whenever the right image is drawn as outcome
                 outcome_tmp = np.array([0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1])
             else:
@@ -612,7 +619,6 @@ def create_trials(low,high,trial_n):
                     pass
                 parallel.setData(0)
                 core.wait(.2)
-                # if test_task_comb[trial] == "view":
                 if task_array[trial]=="view":
                     coin_flip = flip_stim(coin_side_1[current_coin[trial].astype(int)],coin_side_2[current_coin[trial].astype(int)],outcome[trial])
                 else:
@@ -627,35 +633,29 @@ def create_trials(low,high,trial_n):
                     coin_flip.draw()
                     # flip buffers so they appear on the window
                     win0.flip()
-                # coin_flip.draw()
-                # win0.flip()
                 parallel.setData(5)
-                # while  not coin_flip.isFinished:
-                #     coin_flip.draw()
-                #     win0.flip()
                 parallel.setData(0)
                 final_task_comb_array.append(task_array[trial])
-                # coin_flip.stop()
-                # coin_flip._closeMedia()
                 sub_id_array.append(sub_id)
                 block_array.append(phase)
                 final_gamble_array.append("no")
                 date_value_array.append(date_val)
                 loss = loss_array[trial]
-                if outcome[trial]==coin_heads[current_coin[trial].astype(int)]:
-                    outcome_stim_l, loss = outcome_stim_learn(loss,1)
-                else:
-                    outcome_stim_l, loss = outcome_stim_learn(loss,0)
+                print("loss",loss)
+                print("outcome[trial]",outcome[trial])
+                print()
+                print("coin_heads[current_coin[trial].astype(int)]",coin_heads[current_coin[trial].astype(int)])
+                outcome_stim_l, loss = outcome_stim_learn(loss)
                 outcome_stim_l.draw()
+                win0.flip()
+                parallel.setData(6) # show outcome learning
+                core.wait(1.5)
+                parallel.setData(0)
                 final_head_array.append(outcome[trial]==coin_heads[current_coin[trial].astype(int)])
                 final_loss_array.append(loss)
                 final_Mu_array.append(Mu[stim_generate[current_coin[trial].astype(int)]])
                 print("SD",SD[stim_generate==current_coin[trial].astype(int)])
                 final_SD_array.append(SD[stim_generate==current_coin[trial].astype(int)])
-                win0.flip()
-                parallel.setData(6) # show outcome learning
-                core.wait(1.5)
-                parallel.setData(0)
                 # clear the Screen
                 fixation_cross()
                 win0.flip()
@@ -676,7 +676,6 @@ def create_trials(low,high,trial_n):
                 final_use_imagery.append("NA")
                 final_sure_option.append("NA")
             # gambling part:
-            # if use_imagery[stim_generate[i]]==0 and "comb" in task:
     
     for trial_gamble in range(low,high):
         parallel.setData(0)
@@ -709,7 +708,10 @@ def create_trials(low,high,trial_n):
         # Create an array of sure options based on the loss_Mu and loss_SD_view values
         sure_options = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
             loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
-            loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
+            loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view,
+            loss_Mu+loss_SD_img+1,loss_Mu+loss_SD_img-1,
+            loss_Mu+loss_SD_img,loss_Mu-loss_SD_img-1,
+            loss_Mu-loss_SD_img+1,loss_Mu-loss_SD_img])
         loss_array_view = np.array([loss_Mu+loss_SD_view+1,loss_Mu+loss_SD_view-1,
             loss_Mu+loss_SD_view,loss_Mu-loss_SD_view-1,
             loss_Mu-loss_SD_view+1,loss_Mu-loss_SD_view])
@@ -721,19 +723,20 @@ def create_trials(low,high,trial_n):
             loss_Mu-loss_SD_img+1,loss_Mu-loss_SD_img])
         sure_options = np.append(sure_options,sure_options)
         if trial_gamble == 0:
-            # update the subject on what to do:
-            line_1 ="\n אנא קרא/י לנסיינ/ית\n"
-            text_info_start = visual.TextStim(win0,text=line_1,
-                                      pos=(0,0),color = (1,1,1),
-                                      units = "pix", height = 32,wrapWidth=1500,
-                                      alignText = "center",languageStyle='RTL')
-            text_info_start.draw()
+            image_ins = visual.ImageStim(win0, image="instructions_3.JPG")
+            image_ins.draw()
             win0.flip()
-            key = event.waitKeys(maxWait = 9999,keyList = ["v"],clearEvents = True)
+            parallel.setData(10) # instructions learning
+            key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
             if 'return' in key:
                 pass
             win0.flip()
-        for l in range(4):
+            parallel.setData(0)
+        if trial_n ==24: # decide the length of training trials.
+            gamble_blocks = 2
+        else:
+            gamble_blocks = 4
+        for l in range(gamble_blocks):
             if l%2 == 0 :
                 line_1 ="\n עכשיו, יש לך את ההזדמנות להשתמש במה שלמדת על תוצאות המטבע\n"
                 line_2 = "\nאבל, התוצאות שהתקבלו בדמיון, אינם רלבנטיות להחלטה שלך\n"
@@ -771,7 +774,7 @@ def create_trials(low,high,trial_n):
             # Shuffle the order of the sure options
             np.random.shuffle(sure_options)
             # Iterate through each option in the sure options array
-            for s in range(12):
+            for s in range(24):
                 fixation_cross()
                 # flip window onto the screen
                 win0.flip()
@@ -807,7 +810,6 @@ def create_trials(low,high,trial_n):
                                              pos=(200,20),color = (1,1,1),
                                              units = "pix", height = 32,wrapWidth=1500,
                                              alignText = "center",languageStyle="RTL")
-                # image_stim(coin_side_1[stim_coin[i]],coin_side_2[stim_coin[i]])
                 text_coin = visual.TextStim(win0,text="מטבע",
                                              pos=(-200,0),color = (1,1,1),
                                              units = "pix", height = 32,wrapWidth=1500,
@@ -964,7 +966,7 @@ def create_trials(low,high,trial_n):
         if break_flag==1:
             break
     return 
-create_trials(low = 0,high = 1,trial_n = 12)
+create_trials(low = 0,high = 1,trial_n = 24)
 create_trials(low = 1,high = 3,trial_n = 48)
 win0.flip()
 # update the subject on what to do:
