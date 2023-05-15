@@ -2,7 +2,8 @@
 # Gambling
 #####################################
 library(dplyr)
-df = read.csv("2023-05-03_1005_gambling_task.csv")
+
+df = read.csv("2023-05-10_1008_gambling_task.csv")
 df_gamble = df %>% filter(!is.na(sure_option))
 
 library(ggplot2)
