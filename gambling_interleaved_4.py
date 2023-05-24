@@ -1000,7 +1000,7 @@ if 'return' in key:
     pass
 win0.flip()
 
-create_trials(low = 3,high = 5,trial_n = 2)
+create_trials(low = 3,high = 5,trial_n = 48)
 '''
 print(len(trial_no))
 print(len(time_value_array))
