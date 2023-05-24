@@ -277,7 +277,7 @@ def fixation_cross():
     fix_cross_horiz.draw() # this will draw the horizontal bit onto the window
     fix_cross_vert.draw() # this will draw the vertical bit onto the window
 # create our coin stim which displays two sides of the coin to the participant before the trial starts.
-def image_stim(image_type_1,image_type_2,gamble=False):
+def image_stim(image_type_1,image_type_2,stage):
     '''
     We are preparing our Stimulus
     image_type == 0, Stim01.png "frog"
@@ -290,21 +290,31 @@ def image_stim(image_type_1,image_type_2,gamble=False):
     image_type == 7, Stim08.png "house"
     '''
     image_stim_name = ["01","02","03","04","05","06","07","08","09","10"]
-
+    if stage == "learning":
+        position_left = (-270,0)
+        position_right = (270,0)
+        image_right_size= (400,400)
+        image_left_size= (400,400)
+    elif stage == "gamble":
+        position_left = (-300,125)
+        position_right = (-100,125)
+        image_right_size = (125,125)
+        image_left_size= (125,125)
+    else:
+        position_left = (-100,125)
+        position_right = (100,125)
+        image_right_size= (125,125)
+        image_left_size= (125,125)
     image_right = visual.ImageStim(win = win0,
                                        image = "data/Circ" + image_stim_name[image_type_1] +".png",
-                                       pos = (-300,125) if gamble  else (-270,0),units = "pix"
+                                       pos = position_left,units = "pix"
                                        )
     image_left = visual.ImageStim(win = win0,
                                        image = "data/Circ" + image_stim_name[image_type_2] +".png",
-                                       pos = (-100,125) if gamble  else (270,0),units = "pix"
+                                       pos = position_right,units = "pix"
                                        )
-    if gamble:
-        image_right.size= (125,125)
-        image_left.size= (125,125)
-    else:
-        image_right.size = (400,400)
-        image_left.size= (400,400)
+    image_right.size= image_right_size
+    image_left.size= image_left_size
     image_right.draw()# this will draw the right image onto the window
     image_left.draw()# this will draw the left image onto the window
 
@@ -602,7 +612,7 @@ def create_trials(low,high,trial_n):
                 # draw the text onto the window
                 text_view.draw()
                 # draw both coin sides onto the screen
-                image_stim(coin_side_1[current_coin[trial].astype(int)],coin_side_2[current_coin[trial].astype(int)])
+                image_stim(coin_side_1[current_coin[trial].astype(int)],coin_side_2[current_coin[trial].astype(int)],stage = "learning")
                 # flip window onto screen
                 win0.flip()
                 if task_array[trial]=="img":
@@ -818,7 +828,7 @@ def create_trials(low,high,trial_n):
                 text_coin.draw()
                 text_mu.draw()
                 image_stim(coin_side_1[current_coin[trial_gamble].astype(int)],coin_side_2[current_coin[trial_gamble].astype(int)],
-                    gamble=True)
+                    stage="gamble")
                 win0.flip()
                 parallel.setData(14)
                 start_time = clock.getTime()
@@ -887,6 +897,8 @@ def create_trials(low,high,trial_n):
         while continueRoutine:
             Value_Mu.draw()
             text_mu.draw()
+            image_stim(coin_side_1[current_coin[trial_gamble].astype(int)],coin_side_2[current_coin[trial_gamble].astype(int)],
+                    stage = "rate")
             win0.flip()
             keys = event.getKeys()
             if 'space' in keys:
@@ -900,6 +912,8 @@ def create_trials(low,high,trial_n):
         while continueRoutine:
             Value_conf.draw()
             text_conf.draw()
+            image_stim(coin_side_1[current_coin[trial_gamble].astype(int)],coin_side_2[current_coin[trial_gamble].astype(int)],
+                    stage = "rate")
             win0.flip()
             keys = event.getKeys()
             if 'space' in keys:
@@ -916,6 +930,8 @@ def create_trials(low,high,trial_n):
             text_range.draw()
             text_low.draw()
             text_high.draw()
+            image_stim(coin_side_1[current_coin[trial_gamble].astype(int)],coin_side_2[current_coin[trial_gamble].astype(int)],
+                    stage = "rate")
             win0.flip()
             keys = event.getKeys()
             if 'space' in keys:
@@ -935,6 +951,8 @@ def create_trials(low,high,trial_n):
         while continueRoutine:
             Value_conf.draw()
             text_conf.draw()
+            image_stim(coin_side_1[current_coin[trial_gamble].astype(int)],coin_side_2[current_coin[trial_gamble].astype(int)],
+                    stage = "rate")
             win0.flip()
             keys = event.getKeys()
             if 'space' in keys:
@@ -982,7 +1000,7 @@ if 'return' in key:
     pass
 win0.flip()
 
-create_trials(low = 3,high = 5,trial_n = 48)
+create_trials(low = 3,high = 5,trial_n = 2)
 '''
 print(len(trial_no))
 print(len(time_value_array))
