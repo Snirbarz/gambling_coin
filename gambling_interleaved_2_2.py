@@ -546,8 +546,6 @@ def create_trials(low,high,trial_n):
                 loss_Mu - loss_SD_img-1,loss_Mu-loss_SD_img-1,
                 loss_Mu - loss_SD_img,loss_Mu-loss_SD_img])     
             # shuffle loss_array_tmp using randomize array
-            randomize = np.arange(len(loss_array_tmp))
-            np.random.shuffle(randomize)
             # flip values in outcome_tmp if coin_heads is 0
             task_array_tmp = np.array(["view","view","view","view","view","view","view","view","view","view","view","view",
                 "img","img","img","img","img","img","img","img","img","img","img","img"])
@@ -556,34 +554,51 @@ def create_trials(low,high,trial_n):
                 outcome_tmp = np.array([0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1])
             else:
                 outcome_tmp = np.array([1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0])
-            # shuffle outcome_tmp using randomize array
-            for i, category in enumerate(task_array_tmp):
-                if category == "view":
-                    view_indices.append(i)
-                elif category == "img":
-                    img_indices.append(i)
-
-            # Shuffle the index lists
-            np.random.shuffle(view_indices)
-            np.random.shuffle(img_indices)
-
-            # Select the first three indices from each shuffled list
-            selected_indices = view_indices[:3] + img_indices[:3] + view_indices[3:6] + img_indices[3:6] +view_indices[6:9] + img_indices[6:9] + view_indices[9:12] + img_indices[9:12]
-            # outcome_tmp = outcome_tmp[randomize]
-            # loss_array_tmp = loss_array_tmp[randomize]
-            # task_array_tmp = task_array_tmp[randomize]
             # update loss_array, outcome, and current_coin with current coin's trials
             loss_array = np.append(loss_array,loss_array_tmp)
             outcome = np.append(outcome,outcome_tmp)
             current_coin = np.append(current_coin,np.repeat(stim_generate[coin],24))
             task_array = np.append(task_array,task_array_tmp)
     # shuffle all trials together using randomize array
+    # Initialize lists to store indices for each category
+    view_indices_coin_1 = []
+    view_indices_coin_2 = []
+    img_indices_coin_1 = []
+    img_indices_coin_2 = []
+    # shuffle outcome_tmp using randomize array
+    for i, task in enumerate(task_array):
+        if (high - low) > 1:
+            if task == "view" and current_coin[i] == stim_generate[low]:
+                view_indices_coin_1.append(i)
+            elif task == "view" and current_coin[i] == stim_generate[high-1]:
+                view_indices_coin_2.append(i)
+            elif task == "img" and current_coin[i] == stim_generate[low]:
+                img_indices_coin_1.append(i)
+            elif task == "img" and current_coin[i] == stim_generate[high-1]:
+                img_indices_coin_2.append(i)
+        else:
+            if task == "view":
+                view_indices_coin_1.append(i)
+            elif task == "img":
+                img_indices_coin_1.append(i)
+    # Shuffle the index lists
+    np.random.shuffle(view_indices_coin_1)
+    np.random.shuffle(img_indices_coin_1)
+    np.random.shuffle(view_indices_coin_2)
+    np.random.shuffle(img_indices_coin_2)
+    # Select the first three indices from each shuffled list
+    selected_indices = []
+    for i in range(0, len(view_indices_coin_1)-3, 3):
+        if (high - low) > 1:
+            selected_indices += [view_indices_coin_1[i:i+3], img_indices_coin_1[i:i+3], view_indices_coin_2[i:i+3], img_indices_coin_2[i:i+3]]
+        else:
+            selected_indices += [view_indices_coin_1[i:i+3], img_indices_coin_1[i:i+3]]
+    selected_indices = np.array(selected_indices).flatten()
     randomize =  np.arange(len(loss_array))       
-    # np.random.shuffle(randomize)
-    # loss_array = loss_array[randomize]
-    # outcome = outcome[randomize]
-    # current_coin = current_coin[randomize]
-    # task_array = task_array[randomize]
+    loss_array = loss_array[selected_indices]
+    outcome = outcome[selected_indices]
+    current_coin = current_coin[selected_indices]
+    task_array = task_array[selected_indices]
     print("current_coin",current_coin)
     print("task_array",task_array)
     print("loss_array",loss_array)
