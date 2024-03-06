@@ -34,7 +34,7 @@ Stimuli: all presented at 80cm away from the screen
             block 2 (2 coins)  ==> 12 Imagination trials and 12 viewing trials per coin
     Trial:
             show coin sides and whether it's an imagination or observation trial
-            fixation start (500ms) # Snir 
+            fixation start (500ms) # Snir
             imagination/viewing trial
             rate mean (0-20; no time limit)
             confidence rating  (0-100 VAS; no time limit)
@@ -81,10 +81,10 @@ import pathlib
 parallel.setPortAddress()
 
 # reset bits
-parallel.setData(0) 
+parallel.setData(0)
 
 # obtain the current date
-date_val = datetime.now().strftime("%Y-%m-%d") 
+date_val = datetime.now().strftime("%Y-%m-%d")
 
 # create a dialog box to collect subject information
 my_Dlg = gui.Dlg(title = "gambling task")
@@ -121,7 +121,7 @@ print(save_path)
 print("setup finished")
 
 # obtain the current time
-cur_time = datetime.now().strftime('%H%M%S') 
+cur_time = datetime.now().strftime('%H%M%S')
 
 # create variables
 no_trials = 5 # number of total trials (equal to number of unique coins)
@@ -183,7 +183,7 @@ new_coin_array = np.append(np.array(0),new_coin_array)
 stim_generate = new_coin_array # decide which combination of mu and SD is selected for the current trial.
 for n in range(no_trials):
     stim_coin.append(new_coin_array[n])
-    
+
     cur_time_array.append(datetime.now().strftime('%H%M%S'))
 stim_coin = np.array(stim_coin).flatten()
 print("stim_coin",stim_coin)
@@ -470,7 +470,7 @@ if 'return' in key:
 win0.flip()
 # update the subject on what to do:
 
-image_ins = visual.ImageStim(win0, image="instructions_1.JPG")
+image_ins = visual.ImageStim(win0, image="data/instructions_1.JPG")
 image_ins.draw()
 win0.flip()
 parallel.setData(10) # instructions learning
@@ -479,7 +479,7 @@ if 'return' in key:
     pass
 win0.flip()
 parallel.setData(0)
-image_ins = visual.ImageStim(win0, image="instructions_2.JPG")
+image_ins = visual.ImageStim(win0, image="data/instructions_2.JPG")
 image_ins.draw()
 win0.flip()
 parallel.setData(10) # instructions learning
@@ -521,10 +521,10 @@ def create_trials(low,high,trial_n):
     # Iterate over the range of coins.
     for coin in range(low,high):
             # what is the mu for the current trial i
-            loss_Mu  = Mu[stim_generate[coin]] 
+            loss_Mu  = Mu[stim_generate[coin]]
             if SD[coin] == "LH":
                 # set loss_SD_img and loss_SD_view based on value of SD
-                loss_SD_img = 1 
+                loss_SD_img = 1
                 loss_SD_view = 6
             elif SD[coin] == "HL":
                 loss_SD_img = 6
@@ -544,12 +544,12 @@ def create_trials(low,high,trial_n):
                 loss_Mu+loss_SD_img,loss_Mu+loss_SD_img,
                 loss_Mu - loss_SD_img+1,loss_Mu-loss_SD_img+1,
                 loss_Mu - loss_SD_img-1,loss_Mu-loss_SD_img-1,
-                loss_Mu - loss_SD_img,loss_Mu-loss_SD_img])     
+                loss_Mu - loss_SD_img,loss_Mu-loss_SD_img])
             # shuffle loss_array_tmp using randomize array
             # flip values in outcome_tmp if coin_heads is 0
             task_array_tmp = np.array(["view","view","view","view","view","view","view","view","view","view","view","view",
                 "img","img","img","img","img","img","img","img","img","img","img","img"])
-            if coin_heads[coin]==1: 
+            if coin_heads[coin]==1:
                 # if coin heads is 1 then higher than avg loss is received whenever the right image is drawn as outcome
                 outcome_tmp = np.array([0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1])
             else:
@@ -595,7 +595,7 @@ def create_trials(low,high,trial_n):
         else:
             selected_indices += [view_indices_coin_1[i:i+3], img_indices_coin_1[i:i+3]]
     selected_indices = np.array(selected_indices).flatten()
-    randomize =  np.arange(len(loss_array))       
+    randomize =  np.arange(len(loss_array))
     loss_array = loss_array[selected_indices]
     outcome = outcome[selected_indices]
     current_coin = current_coin[selected_indices]
@@ -714,7 +714,7 @@ def create_trials(low,high,trial_n):
                 final_use_imagery.append("NA")
                 final_sure_option.append("NA")
             # gambling part:
-    
+
     for trial_gamble in range(low,high):
         parallel.setData(0)
         line_1 ="\nלחץ/י D אם את/ה רוצה להמר על תוצאות המטבע\n"
@@ -725,7 +725,7 @@ def create_trials(low,high,trial_n):
                             units = "pix", height = 32,wrapWidth=1500,
                             alignText = "center",languageStyle='RTL')
         text_info_start.draw()
-        
+
         win0.flip()
         key = event.waitKeys(maxWait = 9999,keyList = ["return"],clearEvents = True)
         if 'return' in key:
@@ -735,7 +735,7 @@ def create_trials(low,high,trial_n):
         loss_Mu  = Mu[stim_generate[trial_gamble]] # what is the mu for the current trial i
         # Determine the value of loss_SD_img and loss_SD_view based on the current trial's SD value
         if SD[trial_gamble] == "LH":
-            loss_SD_img = 1 
+            loss_SD_img = 1
             loss_SD_view = 6
         elif SD[trial_gamble] == "HL":
             loss_SD_img = 6
@@ -761,7 +761,7 @@ def create_trials(low,high,trial_n):
             loss_Mu-loss_SD_img+1,loss_Mu-loss_SD_img])
         sure_options = np.append(sure_options,sure_options)
         if trial_gamble == 0:
-            image_ins = visual.ImageStim(win0, image="instructions_3.JPG")
+            image_ins = visual.ImageStim(win0, image="data/instructions_3.JPG")
             image_ins.draw()
             win0.flip()
             parallel.setData(10) # instructions learning
@@ -801,7 +801,7 @@ def create_trials(low,high,trial_n):
                                         pos=(0,0),color = (1,1,1),
                                         units = "pix", height = 32,wrapWidth=1500,
                                         alignText = "center",languageStyle='RTL')
-                pin = 13                    
+                pin = 13
             text_info_start.draw()
             win0.flip()
             parallel.setData(pin)
@@ -1011,7 +1011,7 @@ def create_trials(low,high,trial_n):
         save_results(save_file_name)
         if break_flag==1:
             break
-    return 
+    return
 create_trials(low = 0,high = 1,trial_n = 24)
 create_trials(low = 1,high = 3,trial_n = 48)
 win0.flip()
