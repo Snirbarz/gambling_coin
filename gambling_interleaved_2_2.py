@@ -588,7 +588,8 @@ def create_trials(low,high,trial_n):
     np.random.shuffle(img_indices_coin_2)
     # Select the first three indices from each shuffled list
     selected_indices = []
-    for i in range(0, len(view_indices_coin_1)-3, 3):
+    for i in range(0, len(view_indices_coin_1), 3):
+        print("i",i)
         if (high - low) > 1:
             selected_indices += [view_indices_coin_1[i:i+3], img_indices_coin_1[i:i+3], view_indices_coin_2[i:i+3], img_indices_coin_2[i:i+3]]
         else:
@@ -769,7 +770,7 @@ def create_trials(low,high,trial_n):
                 pass
             win0.flip()
             parallel.setData(0)
-        if trial_n ==24: # decide the length of training trials.
+        if trial_n ==24: # decide the length of gambling trials.
             gamble_blocks = 2
         else:
             gamble_blocks = 4
@@ -854,7 +855,7 @@ def create_trials(low,high,trial_n):
                 text_half.draw()
                 text_coin.draw()
                 text_mu.draw()
-                image_stim(coin_side_1[current_coin[trial_gamble].astype(int)],coin_side_2[current_coin[trial_gamble].astype(int)],
+                image_stim(coin_side_1[stim_coin[trial_gamble].astype(int)],coin_side_2[stim_coin[trial_gamble].astype(int)],
                     stage="gamble")
                 win0.flip()
                 parallel.setData(14)
