@@ -1,0 +1,91 @@
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #111;
+  color: #f8f8f8;
+  direction: rtl;
+}
+
+.jspsych-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.instructions {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.coin-pair {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.coin-card {
+  position: relative;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.coin-card img {
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+}
+
+.coin-card.small img {
+  width: 140px;
+  height: 140px;
+}
+
+.coin-card.highlight::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 6px solid #3adb62;
+  box-shadow: 0 0 25px rgba(58, 219, 98, 0.7);
+  pointer-events: none;
+}
+
+.status-text {
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  white-space: pre-line;
+}
+
+.fixation {
+  font-size: 4rem;
+  letter-spacing: 1rem;
+}
+
+.outcome-display {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: #ffcc66;
+}
+
+.slider-wrapper {
+  text-align: center;
+}
+
+.slider-wrapper label {
+  display: block;
+  margin: 1rem 0 0.5rem;
+}
+
+.slider-wrapper input[type="range"] {
+  width: 100%;
+}
+
+.value-preview {
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+button.jspsych-btn {
+  font-size: 1.1rem;
+}
