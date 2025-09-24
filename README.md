@@ -18,3 +18,4 @@ A fully client-side jsPsych experiment is available in `jspsych_app/`.
 4. At the end of the experiment, use the provided button to download the CSV data file.
 
 The jsPsych port reproduces the trial structure of the PsychoPy task, including the training phase, two experimental blocks, gamble decisions with imagery instructions, and the estimation sliders.
+

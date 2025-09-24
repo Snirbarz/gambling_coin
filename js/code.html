@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="jatos.js"></script>
+  <title>Gambling Task</title>
+  <!-- Load jsPsych core library -->
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <!-- Load jsPsych plugins -->
+  <script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-video-keyboard-response@2.1.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.3"></script>
+  <!-- Load jsPsych default CSS -->
+  <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
+</head>
+  <!-- Custom CSS styles -->
+  <style>
+    body {
+      background-color: black; /* Match PsychoPy background */
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden; /* Prevent scroll bars */
+      font-family: sans-serif; /* Default font */
+    }
+    /* Center the experiment content */
+    .jspsych-display-element {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    /* Fixation cross styling (approximates PsychoPy Rect) */
+    .fixation {
+        position: relative;
+        width: 12px; /* Corresponds to PsychoPy width=12 */
+        height: 12px; /* Corresponds to PsychoPy height=12 */
+        /* background-color: red; */ /* For debugging position */
+    }
+    .fixation::before, .fixation::after {
+        content: '';
+        position: absolute;
+        background-color: white; /* Match PsychoPy color=[1,1,1] */
+    }
+    /* Vertical bar */
+    .fixation::before {
+        width: 1px; /* Thickness based on PsychoPy height=1 */
+        height: 12px; /* Length based on PsychoPy height=12 */
+        left: 5.5px; /* Center the 1px line within 12px */
+        top: 0;
+    }
+    /* Horizontal bar */
+    .fixation::after {
+        width: 12px; /* Length based on PsychoPy width=12 */
+        height: 1px; /* Thickness based on PsychoPy width=1 */
+        left: 0;
+        top: 5.5px; /* Center the 1px line within 12px */
+    }
+
+    /* Container for learning trial images */
+    .coin-container-learning {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px; /* Space below coins */
+        position: relative; /* Needed for absolute positioning of highlight */
+        width: 100%; /* Take full width */
+        height: 400px; /* Match image height */
+    }
+     .coin-container-learning img {
+        width: 400px; /* Match PsychoPy size */
+        height: 400px;
+        /* PsychoPy pos: (-270,0) and (270,0). Total span 540px. */
+        /* Flexbox handles spacing better. Adjust margin if needed */
+        margin: 0 135px; /* Pushes them apart, approx (-270) and (270) from center */
+    }
+
+    /* Container for gamble trial images */
+    .coin-container-gamble {
+        display: flex;
+        justify-content: center; /* Center images within their container */
+        align-items: center;
+        /* No absolute positioning needed here - part of flex layout below */
+    }
+    .coin-container-gamble img {
+        width: 125px; /* Match PsychoPy size */
+        height: 125px;
+        /* PsychoPy pos: (-300,125) and (-100,125) or (-100,125) and (100,125) */
+        /* These are placed within larger flex containers in the trial definition */
+        margin: 0 10px; /* Small margin between the two small coins */
+    }
+
+     /* Container for rating trial images */
+    .coin-container-rate {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Positioned absolutely within the rating trial stimulus */
+    }
+    .coin-container-rate img {
+        width: 125px; /* Match PsychoPy size */
+        height: 125px;
+        /* PsychoPy pos: (-100,125) and (100,125) */
+        margin: 0 37.5px; /* Approx positions relative to center */
+    }
+
+    /* Green highlight circle for imagination trials */
+    .outcome-circle {
+        position: absolute;
+        border: 15px solid green; /* Approximates PsychoPy lineWidth=30 */
+        border-radius: 50%;
+        width: 410px; /* Approx (radius=220 - border)*2 */
+        height: 410px;
+        top: -20px; /* Adjust to align with image */
+        opacity: 0.8;
+        pointer-events: none; /* Prevent interference */
+    }
+    .outcome-circle-left {
+        /* Position around the left image. Image margin is 135px. Image width 400px. */
+        /* Center is at 50%. Left edge is 50% - 135px - 200px. */
+        left: calc(50% - 135px - 200px - 5px); /* Adjust alignment */
+    }
+    .outcome-circle-right {
+        /* Position around the right image. Right edge is 50% + 135px + 200px. */
+        /* Right position needs adjustment based on container */
+        right: calc(50% - 135px - 200px - 5px); /* Adjust alignment */
+    }
+
+    /* Slider styling */
+    .jspsych-html-slider-response-container label {
+        color: white;
+    }
+    .jspsych-html-slider-response-container {
+        width: 1000px; /* Match PsychoPy size */
+        margin-top: 20px; /* Space above slider */
+    }
+    /* Style slider thumb/handle based on trial type (more complex, requires JS or more classes) */
+    /* Example: Green thumb for mu rating */
+    .rating-mu .jspsych-slider-target { background: green !important; }
+    /* Example: Blue thumb for range rating */
+    .rating-range .jspsych-slider-target { background: blue !important; }
+    /* Example: Red thumb for confidence rating */
+    .rating-confidence .jspsych-slider-target { background: red !important; }
+
+    /* Ensure Hebrew text displays right-to-left */
+    [style*="direction: rtl"] {
+        direction: rtl;
+    }
+    input[type="text"] {
+      font-size: 18px;
+      padding: 5px;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 15px;
+    }
+
+  </style>
+
+
+<!-- Link to the external JavaScript file containing the experiment logic -->
+<script src="https://bat.fra1.digitaloceanspaces.com/gamblingcoin/experiment.js"></script>
+</html>
