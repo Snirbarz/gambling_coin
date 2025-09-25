@@ -12,10 +12,17 @@ A fully client-side jsPsych experiment is available in `jspsych_app/`.
 
 ### Running locally
 
-1. Launch a local HTTP server from the repository root (e.g., `python -m http.server`).
-2. Open `http://localhost:8000/jspsych_app/index.html` in a modern browser.
-3. Provide the requested participant details and follow the on-screen instructions.
-4. At the end of the experiment, use the provided button to download the CSV data file.
+
+1. Ensure the required JavaScript dependencies are available under `js/`:
+   * `js/jspsych-7.3.3/` – copy the jsPsych distribution (core library, CSS, and the plugins used in the task).
+   * `js/jatos.js` – include the JATOS helper script when packaging for a JATOS study.
+   The experiment will fall back to the jsDelivr CDN for jsPsych assets if the local copies are missing, which is convenient for
+   quick local testing but not recommended for production deployments.
+2. Launch a local HTTP server from the repository root (e.g., `python -m http.server`).
+3. Open `http://localhost:8000/jspsych_app/index.html` in a modern browser.
+4. Provide the requested participant details and follow the on-screen instructions.
+5. At the end of the experiment, download the CSV data file (or, in a JATOS deployment, the data will be submitted
+   automatically to the server).
 
 The jsPsych port reproduces the trial structure of the PsychoPy task, including the training phase, two experimental blocks, gamble decisions with imagery instructions, and the estimation sliders.
 

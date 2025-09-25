@@ -1,11 +1,41 @@
 (function () {
-  const jsPsych = initJsPsych({
-    display_element: document.querySelector('#jspsych-target'),
-  });
+  const jatosAvailable =
+    typeof window.jatos !== 'undefined' &&
+    typeof window.jatos.onLoad === 'function';
 
-  const timeline = [];
+  const startExperiment = () => {
+    const participantInfo = {};
 
-  const imageIds = [
+    const jsPsych = initJsPsych({
+      display_element: document.querySelector('#jspsych-target'),
+      on_finish: () => {
+        if (jatosAvailable) {
+          const csv = jsPsych.data.get().csv();
+          const metadata = {
+            participant_id: participantInfo.id || null,
+            session_date: participantInfo.date || null,
+          };
+          jatos
+            .submitResultData({ csv, metadata })
+            .then(() => jatos.endStudy())
+            .catch(() => {
+              const filename = `gambling_${
+                participantInfo.id || 'participant'
+              }_${jsPsych.randomization.randomID(6)}.csv`;
+              jsPsych.data.get().localSave('csv', filename);
+            });
+        }
+      },
+    });
+
+    if (jatosAvailable && typeof jatos.addAbortButton === 'function') {
+      jatos.addAbortButton();
+    }
+
+    const timeline = [];
+
+    const imageIds = [
+
     '01',
     '02',
     '03',
@@ -18,17 +48,17 @@
     '10',
   ];
 
-  const preload = {
-    type: jsPsychPreload,
-    auto_preload: true,
-    images: imageIds.map((id) => `data/Circ${id}.png`),
-  };
-  timeline.push(preload);
 
-  const participantInfo = {};
+    const preload = {
+      type: jsPsychPreload,
+      auto_preload: true,
+      images: imageIds.map((id) => `data/Circ${id}.png`),
+    };
+    timeline.push(preload);
 
-  timeline.push({
-    type: jsPsychSurveyHtmlForm,
+    timeline.push({
+      type: jsPsychSurveyHtmlForm,
+
     preamble:
       '<div class="instructions">מלא/י את פרטי ההשתתפות לפני תחילת המשימה.</div>',
     html: `
@@ -49,8 +79,9 @@
     },
   });
 
-  timeline.push({
-    type: jsPsychHtmlButtonResponse,
+    timeline.push({
+      type: jsPsychHtmlButtonResponse,
+
     stimulus: `
       <div class="instructions">
         <p>ברוכים הבאים למשימת ההימורים. בתחילת המשימה תוצג לך מטבע אחת לשלב האימון, ולאחר מכן ארבע מטבעות נוספות בשני בלוקים.</p>
@@ -65,7 +96,8 @@
     },
   });
 
-  function shuffle(array) {
+    function shuffle(array) {
+
     const result = array.slice();
     for (let i = result.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -74,7 +106,8 @@
     return result;
   }
 
-  function range(start, end) {
+    function range(start, end) {
+
     const values = [];
     for (let v = start; v < end; v += 1) {
       values.push(v);
@@ -82,7 +115,9 @@
     return values;
   }
 
-  function chunk(array, size) {
+
+    function chunk(array, size) {
+
     const chunks = [];
     for (let i = 0; i < array.length; i += size) {
       chunks.push(array.slice(i, i + size));
@@ -90,7 +125,8 @@
     return chunks;
   }
 
-  function lossSet(mu, spread) {
+    function lossSet(mu, spread) {
+
     return [
       mu + spread + 1,
       mu + spread + 1,
@@ -107,14 +143,16 @@
     ];
   }
 
-  function outcomePattern(headSide) {
+    function outcomePattern(headSide) {
+
     if (headSide === 1) {
       return [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1];
     }
     return [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0];
   }
 
-  function buildExperiment() {
+    function buildExperiment() {
+
     const noTrials = 5;
     const muValues = [-10, -10, -10, -10, -10];
     const sdLabels = ['MM', 'LH', 'HL', 'LH', 'HL'];
@@ -639,9 +677,10 @@
     return timelineEvents;
   }
 
-  const experiment = buildExperiment();
+    const experiment = buildExperiment();
 
-  experiment.blocks.forEach((block) => {
+    experiment.blocks.forEach((block) => {
+
     const learningTrials = buildLearningTimeline(block);
     learningTrials.forEach((trial, idx) => {
       timeline.push(...learningTrialEvents(trial, idx));
@@ -649,22 +688,36 @@
     timeline.push(...buildGamblingTimeline(block));
   });
 
-  timeline.push({
-    type: jsPsychHtmlButtonResponse,
-    stimulus: `
-      <div class="instructions">
-        <p>הניסוי הסתיים. תודה על ההשתתפות!</p>
-        <p>לחץ/י על הכפתור כדי להוריד את הנתונים.</p>
-      </div>
-    `,
-    choices: ['הורדת נתונים'],
-    on_finish: () => {
-      const filename = `gambling_${
-        participantInfo.id || 'participant'
-      }_${jsPsych.randomization.randomID(6)}.csv`;
-      jsPsych.data.get().localSave('csv', filename);
-    },
-  });
+    timeline.push({
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+        <div class="instructions">
+          <p>הניסוי הסתיים. תודה על ההשתתפות!</p>
+          <p>${
+            jatosAvailable
+              ? 'לחץ/י על הכפתור כדי לסיים את הניסוי.'
+              : 'לחץ/י על הכפתור כדי להוריד את הנתונים.'
+          }</p>
+        </div>
+      `,
+      choices: [jatosAvailable ? 'סיום' : 'הורדת נתונים'],
+      on_finish: () => {
+        if (!jatosAvailable) {
+          const filename = `gambling_${
+            participantInfo.id || 'participant'
+          }_${jsPsych.randomization.randomID(6)}.csv`;
+          jsPsych.data.get().localSave('csv', filename);
+        }
+      },
+    });
 
-  jsPsych.run(timeline);
+    jsPsych.run(timeline);
+  };
+
+  if (jatosAvailable) {
+    jatos.onLoad(startExperiment);
+  } else {
+    startExperiment();
+  }
+
 })();

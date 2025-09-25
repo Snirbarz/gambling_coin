@@ -5,19 +5,80 @@
     <title>Gambling Task (jsPsych)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
+      id="jspsych-css"
       rel="stylesheet"
-      href="https://unpkg.com/jspsych@7.3.3/dist/jspsych.css"
+      href="../js/jspsych-7.3.3/jspsych.css"
     />
+    <script>
+      const jspsychCss = document.getElementById('jspsych-css');
+      if (jspsychCss) {
+        jspsychCss.addEventListener('error', () => {
+          const fallbackCss = document.createElement('link');
+          fallbackCss.rel = 'stylesheet';
+          fallbackCss.href =
+            'https://unpkg.com/jspsych@7.3.3/dist/jspsych.css';
+          document.head.appendChild(fallbackCss);
+        });
+      }
+    </script>
+
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <div id="jspsych-target"></div>
-    <script src="https://unpkg.com/jspsych@7.3.3/dist/jspsych.js"></script>
-    <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-preload.js"></script>
-    <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-keyboard-response.js"></script>
-    <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-button-response.js"></script>
-    <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-slider-response.js"></script>
-    <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-survey-html-form.js"></script>
+    <script src="../js/jspsych-7.3.3/jspsych.js"></script>
+    <script>
+      if (typeof window.jsPsych === 'undefined') {
+        document.write(
+          '<script src="https://unpkg.com/jspsych@7.3.3/dist/jspsych.js"><\/script>'
+        );
+      }
+    </script>
+    <script src="../js/jspsych-7.3.3/plugin-preload.js"></script>
+    <script>
+      if (typeof window.jsPsychPreload === 'undefined') {
+        document.write(
+          '<script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-preload.js"><\/script>'
+        );
+      }
+    </script>
+    <script src="../js/jspsych-7.3.3/plugin-html-keyboard-response.js"></script>
+    <script>
+      if (typeof window.jsPsychHtmlKeyboardResponse === 'undefined') {
+        document.write(
+          '<script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-keyboard-response.js"><\/script>'
+        );
+      }
+    </script>
+    <script src="../js/jspsych-7.3.3/plugin-html-button-response.js"></script>
+    <script>
+      if (typeof window.jsPsychHtmlButtonResponse === 'undefined') {
+        document.write(
+          '<script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-button-response.js"><\/script>'
+        );
+      }
+    </script>
+    <script src="../js/jspsych-7.3.3/plugin-html-slider-response.js"></script>
+    <script>
+      if (typeof window.jsPsychHtmlSliderResponse === 'undefined') {
+        document.write(
+          '<script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-slider-response.js"><\/script>'
+        );
+      }
+    </script>
+    <script src="../js/jspsych-7.3.3/plugin-survey-html-form.js"></script>
+    <script>
+      if (typeof window.jsPsychSurveyHtmlForm === 'undefined') {
+        document.write(
+          '<script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-survey-html-form.js"><\/script>'
+        );
+      }
+    </script>
+    <script
+      src="../js/jatos.js"
+      onerror="(function(){var s=document.createElement('script');s.src='jatos.js';document.head.appendChild(s);}())"
+    ></script>
+
     <script src="js/gambling.js"></script>
   </body>
 </html>
