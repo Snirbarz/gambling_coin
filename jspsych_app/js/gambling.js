@@ -35,6 +35,7 @@
     const timeline = [];
 
     const imageIds = [
+
     '01',
     '02',
     '03',
@@ -47,6 +48,7 @@
     '10',
   ];
 
+
     const preload = {
       type: jsPsychPreload,
       auto_preload: true,
@@ -56,6 +58,7 @@
 
     timeline.push({
       type: jsPsychSurveyHtmlForm,
+
     preamble:
       '<div class="instructions">מלא/י את פרטי ההשתתפות לפני תחילת המשימה.</div>',
     html: `
@@ -78,6 +81,7 @@
 
     timeline.push({
       type: jsPsychHtmlButtonResponse,
+
     stimulus: `
       <div class="instructions">
         <p>ברוכים הבאים למשימת ההימורים. בתחילת המשימה תוצג לך מטבע אחת לשלב האימון, ולאחר מכן ארבע מטבעות נוספות בשני בלוקים.</p>
@@ -93,6 +97,7 @@
   });
 
     function shuffle(array) {
+
     const result = array.slice();
     for (let i = result.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -102,6 +107,7 @@
   }
 
     function range(start, end) {
+
     const values = [];
     for (let v = start; v < end; v += 1) {
       values.push(v);
@@ -109,7 +115,9 @@
     return values;
   }
 
+
     function chunk(array, size) {
+
     const chunks = [];
     for (let i = 0; i < array.length; i += size) {
       chunks.push(array.slice(i, i + size));
@@ -118,6 +126,7 @@
   }
 
     function lossSet(mu, spread) {
+
     return [
       mu + spread + 1,
       mu + spread + 1,
@@ -135,6 +144,7 @@
   }
 
     function outcomePattern(headSide) {
+
     if (headSide === 1) {
       return [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1];
     }
@@ -142,6 +152,7 @@
   }
 
     function buildExperiment() {
+
     const noTrials = 5;
     const muValues = [-10, -10, -10, -10, -10];
     const sdLabels = ['MM', 'LH', 'HL', 'LH', 'HL'];
@@ -669,6 +680,7 @@
     const experiment = buildExperiment();
 
     experiment.blocks.forEach((block) => {
+
     const learningTrials = buildLearningTimeline(block);
     learningTrials.forEach((trial, idx) => {
       timeline.push(...learningTrialEvents(trial, idx));
@@ -707,4 +719,5 @@
   } else {
     startExperiment();
   }
+
 })();

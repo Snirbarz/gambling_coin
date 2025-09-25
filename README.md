@@ -12,6 +12,7 @@ A fully client-side jsPsych experiment is available in `jspsych_app/`.
 
 ### Running locally
 
+
 1. Ensure the required JavaScript dependencies are available under `js/`:
    * `js/jspsych-7.3.3/` – copy the jsPsych distribution (core library, CSS, and the plugins used in the task).
    * `js/jatos.js` – include the JATOS helper script when packaging for a JATOS study.
@@ -24,3 +25,4 @@ A fully client-side jsPsych experiment is available in `jspsych_app/`.
    automatically to the server).
 
 The jsPsych port reproduces the trial structure of the PsychoPy task, including the training phase, two experimental blocks, gamble decisions with imagery instructions, and the estimation sliders.
+
